@@ -3,15 +3,20 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Manager = require("../models/managerSchema");
 const bcrypt = require("bcrypt");
-
+const checkAuth = require("../authenticate");
 const managerController = require("../controllers/managerController");
 
 
 //Get all Manager
-router.get("/getAll",managerController.get_all);
+router.get("/getAll",checkAuth,managerController.get_all);
 
 //Manager Sign Up
 router.post("/signup",managerController.sign_up);
+
+//Manager Log In
+router.post("/login",managerController.login);
+
+
 
 
 //Insert a manager
