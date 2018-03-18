@@ -5,6 +5,7 @@ A RESTful API for Pizza Web Application.
 ##  /signup
 **Type of Request: POST**
 This route can be used to sign up a user.
+
 **Input:**
 ``` javascript
 {
