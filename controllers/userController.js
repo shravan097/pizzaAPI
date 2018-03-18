@@ -72,7 +72,7 @@ exports.login = (req,res,next)=>
 			});
 		}
 		if(user[0].typeOfUser != req.body.typeOfUser)
-			throw "User Type Invalid!"
+			throw "User Invalid!"
 		bcrypt.compare(req.body.password,user[0].password,(err,result)=>
 		{
 			if(err){
