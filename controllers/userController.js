@@ -40,7 +40,8 @@ exports.sign_up = (req,res,next)=>
 					const user = new User({
 						_id: new mongoose.Types.ObjectId(),
 						email: req.body.email,
-						password: hash
+						password: hash,
+						typeOfUser: req.body.typeOfUser
 					});
 					user.save()
 					.then(result=>{
@@ -70,6 +71,8 @@ exports.login = (req,res,next)=>
 				message:"Auth Failed"
 			});
 		}
+		if(user[0].typeOfUser != req.body.typeOfUser)
+			throw "User Type Invalid!"
 		bcrypt.compare(req.body.password,user[0].password,(err,result)=>
 		{
 			if(err){
@@ -95,7 +98,7 @@ exports.login = (req,res,next)=>
 			}
 			res.status(401).json({
 				message:"Auth Failed!"
-			});x
+			});
 		});
 	})
 	.catch(err => {
