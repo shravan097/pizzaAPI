@@ -4,8 +4,9 @@ A RESTful API for Pizza Web Application.
 # Docs
 ##  /signup
 **Type of Request: POST**
+<br>
 This route can be used to sign up a user.
-
+<br>
 **Input:**
 ``` javascript
 {
@@ -25,7 +26,7 @@ This route can be used to sign up a user.
 ``` javascript
 // IF USER ALREADY EXISTS
 {
-    "message":"User Created!"
+    "message":"User Exists!"
 }
 ```
 ``` javascript
@@ -36,11 +37,12 @@ This route can be used to sign up a user.
 ```
 ##  /login
 **Type of Request: POST**
+<br>
 This route can be used to login an user. If logged in succesfully, a **token** will be provided as output that will be valid for **1h**. The token will be used as authentication for any privilledged acess.
-
+<br>
 **NOTE**: TOKEN must be kept secured and should be added on HEADER as following to do any privillege actions for certain user.
 ` key: authorization, value: Bearer TOKEN_HERE`
-
+<br>
 
 **Input:**
 ``` javascript
@@ -50,6 +52,7 @@ This route can be used to login an user. If logged in succesfully, a **token** w
 	"typeOfUser":"Manager" //Type: String, Required
 }
 ```
+
 **Output:**
 ``` javascript
 //IF SUCCESSFUL
