@@ -1,9 +1,17 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/userSchema");
+const Manager = require("../models/managerSchema")
 const jwt = require("jsonwebtoken");
 const key = require("../env");
 
+const stores = require('../stores_list');
+
+
+exports.getStoreList = (req,res,next)=>
+{
+	return res.send(stores);
+}
 exports.get_all = (req,res,next)=>
 {
 	console.log(process.env.JWT_KEY)
@@ -22,42 +30,181 @@ exports.get_all = (req,res,next)=>
 
 exports.sign_up = (req,res,next)=>
 {
-	User.find({email: req.body.email})
-	.exec()
-	.then(user =>{
-		if(user.length >= 1){
-			return res.status(409).json({
-				message:"User Exist!"
-			});
-		}else{
-			bcrypt.hash(req.body.password,10,(err,hash)=>
-			{
-				if(err){
-					return res.status(500).json({
-						error: err
-					});
-				}else{
-					const user = new User({
-						_id: new mongoose.Types.ObjectId(),
-						email: req.body.email,
-						password: hash,
-						typeOfUser: req.body.typeOfUser
-					});
-					user.save()
-					.then(result=>{
-						console.log(result);
-						res.status(201).json({
-							message:"User Created!"});
-					})
-					.catch(err=>
-					{
-						console.log(err);
-						res.status(500).json({error:err});
-					});
-				}
-			});
-		}
-	});
+	const typeOfUser = req.body.typeOfUser;
+
+
+	//Manager Sign Up
+	if(typeOfUser==="Manager")
+	{
+
+		User.find({email: req.body.email})
+		.exec()
+		.then(user =>{
+			if(user.length >= 1){
+				return res.status(409).json({
+					message:"User Exist!"
+				});
+			}else{
+				bcrypt.hash(req.body.password,10,(err,hash)=>
+				{
+					if(err){
+						return res.status(500).json({
+							error: err
+						});
+					}else{
+						const manager = new Manager(
+						{
+							_id: new mongoose.Types.ObjectId(),
+							email:req.body.email,
+							name: req.body.name,
+							store_affiliated_with: req.body.store_affiliated_with
+
+						});
+						const user = new User({
+							_id: new mongoose.Types.ObjectId(),
+							email: req.body.email,
+							password: hash,
+							typeOfUser: req.body.typeOfUser
+						});
+						manager.save()
+						user.save()
+						.then(result=>{
+							console.log(result);
+							res.status(201).json({
+								message:"User Created!"});
+						})
+						.catch(err=>
+						{
+							console.log(err);
+							res.status(500).json({error:err});
+						});
+					}
+				});
+			}
+		});
+	}
+
+	// if(typeOfUser==="Chef")
+	// {
+	// 	User.find({email: req.body.email})
+	// 	.exec()
+	// 	.then(user =>{
+	// 		if(user.length >= 1){
+	// 			return res.status(409).json({
+	// 				message:"User Exist!"
+	// 			});
+	// 		}else{
+	// 			bcrypt.hash(req.body.password,10,(err,hash)=>
+	// 			{
+	// 				if(err){
+	// 					return res.status(500).json({
+	// 						error: err
+	// 					});
+	// 				}else{
+	// 					const user = new User({
+	// 						_id: new mongoose.Types.ObjectId(),
+	// 						email: req.body.email,
+	// 						password: hash,
+	// 						typeOfUser: req.body.typeOfUser
+	// 					});
+	// 					user.save()
+	// 					.then(result=>{
+	// 						console.log(result);
+	// 						res.status(201).json({
+	// 							message:"User Created!"});
+	// 					})
+	// 					.catch(err=>
+	// 					{
+	// 						console.log(err);
+	// 						res.status(500).json({error:err});
+	// 					});
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// }
+
+	// if(typeOfUser==="Customer")
+	// {
+	// 	User.find({email: req.body.email})
+	// 	.exec()
+	// 	.then(user =>{
+	// 		if(user.length >= 1){
+	// 			return res.status(409).json({
+	// 				message:"User Exist!"
+	// 			});
+	// 		}else{
+	// 			bcrypt.hash(req.body.password,10,(err,hash)=>
+	// 			{
+	// 				if(err){
+	// 					return res.status(500).json({
+	// 						error: err
+	// 					});
+	// 				}else{
+	// 					const user = new User({
+	// 						_id: new mongoose.Types.ObjectId(),
+	// 						email: req.body.email,
+	// 						password: hash,
+	// 						typeOfUser: req.body.typeOfUser
+	// 					});
+	// 					user.save()
+	// 					.then(result=>{
+	// 						console.log(result);
+	// 						res.status(201).json({
+	// 							message:"User Created!"});
+	// 					})
+	// 					.catch(err=>
+	// 					{
+	// 						console.log(err);
+	// 						res.status(500).json({error:err});
+	// 					});
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// }
+
+	// if(typeOfUser==="Delivery")
+	// {
+	// 	User.find({email: req.body.email})
+	// 	.exec()
+	// 	.then(user =>{
+	// 		if(user.length >= 1){
+	// 			return res.status(409).json({
+	// 				message:"User Exist!"
+	// 			});
+	// 		}else{
+	// 			bcrypt.hash(req.body.password,10,(err,hash)=>
+	// 			{
+	// 				if(err){
+	// 					return res.status(500).json({
+	// 						error: err
+	// 					});
+	// 				}else{
+	// 					const user = new User({
+	// 						_id: new mongoose.Types.ObjectId(),
+	// 						email: req.body.email,
+	// 						password: hash,
+	// 						typeOfUser: req.body.typeOfUser
+	// 					});
+	// 					user.save()
+	// 					.then(result=>{
+	// 						console.log(result);
+	// 						res.status(201).json({
+	// 							message:"User Created!"});
+	// 					})
+	// 					.catch(err=>
+	// 					{
+	// 						console.log(err);
+	// 						res.status(500).json({error:err});
+	// 					});
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// }
+
+	
 };
 
 exports.login = (req,res,next)=>

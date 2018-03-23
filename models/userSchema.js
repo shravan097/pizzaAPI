@@ -11,10 +11,10 @@ const userSchema = mongoose.Schema({
 	password:{ type: String, required:true},
 	typeOfUser:{
 		type:String,
-		enum:['Manager','Chef','Customer'],
+		enum:['Manager','Chef','Customer','Delivery'],
 		required: true
 	},
-	blackListed:{type: Boolean, default: false,required:false}
+	hasFilledAll:{type: Boolean, required:false, default:false}
 
 	}
 );

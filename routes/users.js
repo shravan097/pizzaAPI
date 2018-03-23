@@ -12,6 +12,9 @@ router.get("/getAll",checkAuth,userController.get_all);
 //User Sign Up
 router.post("/signup",userController.sign_up);
 
+//Get all Stores
+router.get("/getStoreList",userController.getStoreList);
+
 //User Log In
 router.post("/login",userController.login);
 
