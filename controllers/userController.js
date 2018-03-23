@@ -66,12 +66,22 @@ exports.sign_up = (req,res,next)=>
 							password: hash,
 							typeOfUser: req.body.typeOfUser
 						});
-						manager.save()
 						user.save()
 						.then(result=>{
 							console.log(result);
-							res.status(201).json({
-								message:"User Created!"});
+							//Update Manager Here
+							manager.save()
+							.then(result2=>
+							{
+								res.status(201).json({
+								message:"Manager User Created!"});
+							})
+							.catch(err=>
+							{
+								console.log(err);
+								res.status(500).json({error:err});
+							})
+							
 						})
 						.catch(err=>
 						{
