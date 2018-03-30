@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const key = require("../env");
 
 const stores = require('../stores_list');
-
+const storeSchema = require("../models/storeSchema.js")
 
 exports.getStoreList = (req,res,next)=>
 {
@@ -66,27 +66,33 @@ exports.sign_up = (req,res,next)=>
 							password: hash,
 							typeOfUser: req.body.typeOfUser
 						});
-						user.save()
-						.then(result=>{
-							console.log(result);
-							//Update Manager Here
-							manager.save()
-							.then(result2=>
-							{
-								res.status(201).json({
-								message:"Manager User Created!"});
-							})
-							.catch(err=>
-							{
-								console.log(err);
-								res.status(500).json({error:err});
-							})
-							
-						})
-						.catch(err=>
+
+						const storeModel = new storeSchema(
 						{
-							console.log(err);
-							res.status(500).json({error:err});
+							_id: new mongoose.Types.ObjectId(),
+							name: req.body.store_affiliated_with,
+							manager_email:req.body.email,
+						});
+						
+						Promise.all([
+							user.save(),
+							manager.save(),
+							storeModel.save()
+							])
+						.then(([userResult,managerResult,storeResult])=>
+						{
+							console.log(userResult);
+							console.log(managerResult);
+							console.log(storeResult);
+
+							res.status(201).json({
+							message:"Manager User Created!"});
+						}).catch((err)=>
+						{
+							console.log("Error!")
+							res.status(500).json(err);
+							console.log('Promise Error Caught!');
+
 						});
 					}
 				});
