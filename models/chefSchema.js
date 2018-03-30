@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const Recipe =  mongoose.Schema()
+const Recipe =  mongoose.Schema(
 {
 	_id:mongoose.Schema.Types.ObjectId,
 	name:{type:String,required:true},
 	price:{type: Number, required:true},
 	rating:{type:Number,required:false, default:0},
 	description:{type:String,required:true}
-}
+});
 
 const chefSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
@@ -17,8 +17,8 @@ const chefSchema = mongoose.Schema({
 		unique: true,
 		match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 	},
-	name:{ type:String,required: true},
-	recipe: [Recipe],
+	name:{type:String,required:true},
+	recipe:[Recipe],
 	store_affiliated_with:{type:String, required:true}
 
 	}

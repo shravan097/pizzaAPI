@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("../models/userSchema");
-const Manager = require("../models/managerSchema")
+const Manager = require("../models/managerSchema");
+const Chef = require("../models/chefSchema");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
 
@@ -37,6 +38,9 @@ exports.sign_up = (req,res,next)=>
 	if(typeOfUser==="Manager")
 	{
 
+
+		
+		//Check If User Exists
 		User.find({email: req.body.email})
 		.exec()
 		.then(user =>{
@@ -45,6 +49,17 @@ exports.sign_up = (req,res,next)=>
 					message:"User Exist!"
 				});
 			}else{
+				//Check if store is already registered
+				storeSchema.find({name:req.body.store_affiliated_with})
+						.exec()
+						.then(store=>{
+							if(store.length===1){
+								return res.status(409).json({
+									error_code:21,
+									message:"Store already registered by a Manager"
+								});
+							}
+						});
 				bcrypt.hash(req.body.password,10,(err,hash)=>
 				{
 					if(err){
@@ -99,46 +114,80 @@ exports.sign_up = (req,res,next)=>
 			}
 		});
 	}
+	if(typeOfUser==="Chef")
+	{
+		let selected_store;
+		storeSchema.find({name:req.body.store_affiliated_with})
+		.exec()
+		.then(store=>{
+			if(store.length!=1){
+				return res.status(409).json({
+					error_code:20,
+					message:"Store not registered by Manager yet"
+				});
+			}
+			else{
+				selected_store = store;
+			}
+		});
 
-	// if(typeOfUser==="Chef")
-	// {
-	// 	User.find({email: req.body.email})
-	// 	.exec()
-	// 	.then(user =>{
-	// 		if(user.length >= 1){
-	// 			return res.status(409).json({
-	// 				message:"User Exist!"
-	// 			});
-	// 		}else{
-	// 			bcrypt.hash(req.body.password,10,(err,hash)=>
-	// 			{
-	// 				if(err){
-	// 					return res.status(500).json({
-	// 						error: err
-	// 					});
-	// 				}else{
-	// 					const user = new User({
-	// 						_id: new mongoose.Types.ObjectId(),
-	// 						email: req.body.email,
-	// 						password: hash,
-	// 						typeOfUser: req.body.typeOfUser
-	// 					});
-	// 					user.save()
-	// 					.then(result=>{
-	// 						console.log(result);
-	// 						res.status(201).json({
-	// 							message:"User Created!"});
-	// 					})
-	// 					.catch(err=>
-	// 					{
-	// 						console.log(err);
-	// 						res.status(500).json({error:err});
-	// 					});
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	// }
+		User.find({email: req.body.email})
+		.exec()
+		.then(user =>{
+			if(user.length >= 1){
+				return res.status(409).json({
+					message:"User Exist!"
+				});
+			}else{
+				bcrypt.hash(req.body.password,10,(err,hash)=>
+				{
+					if(err){
+						return res.status(500).json({
+							error: err
+						});
+					}else{
+						const chef = new Chef(
+						{
+							_id: new mongoose.Types.ObjectId(),
+							email:req.body.email,
+							name: req.body.name,
+							store_affiliated_with: req.body.store_affiliated_with
+						});
+						const user = new User({
+							_id: new mongoose.Types.ObjectId(),
+							email: req.body.email,
+							password: hash,
+							typeOfUser: req.body.typeOfUser
+						});
+						console.log(selected_store[0])
+						selected_store[0].chefs.email.push(req.body.email);
+
+						Promise.all([
+							user.save(),
+							chef.save(),
+							selected_store[0].save()])
+						.then(([userResult,chefResult,storeResults])=>
+						{
+							console.log(userResult);
+							console.log(chefResult);
+							console.log(storeResults)
+
+							res.status(201).json({
+							message:"Chef User Created!"});
+						}).catch((err)=>
+						{
+							console.log("Error!")
+							res.status(500).json(err);
+							console.log('Promise Error Caught!');
+
+						});
+					}
+				});
+			}
+		});
+	}
+
+
 
 	// if(typeOfUser==="Customer")
 	// {
