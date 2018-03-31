@@ -20,8 +20,11 @@ const db = mongoose.connection;
 //Error Check
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-//Manager Model
+//User Route
 const users = require('./routes/users');
+//Store Route
+const store = require('./routes/storeRoutes');
+
 
 var app = express();
 
@@ -37,6 +40,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Route for stores
+app.use('/store',store)
 app.use('/', users);
 
 

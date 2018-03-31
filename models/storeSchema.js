@@ -15,7 +15,9 @@ const storeSchema = mongoose.Schema(
 		chefs: {email:{type:Array,required:false,unique:true,default:[]}},
 		//Store has Bunch of Customers that must be approved by Manager
 		registered_customers:{email:{type:Array,required:false,unique:true,default:[]}},
-		pending_customers:{email:{type:Array,required:false,unique:true,default:[]}},
+		pending_customers:{
+			email:{type:Array,required:false,unique:true,default:[]}
+		},
 		blacklisted_customers:{email:{type:Array,required:false,unique:true,default:[]}}
 	}
 );
