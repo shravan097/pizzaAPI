@@ -147,7 +147,7 @@ exports.sign_up = (req,res,next)=>
 							error: err
 						});
 					}else{
-						const chef = new Chef(
+						const chef = new Chef['chef'](
 						{
 							_id: new mongoose.Types.ObjectId(),
 							email:req.body.email,

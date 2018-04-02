@@ -23,4 +23,9 @@ const chefSchema = mongoose.Schema({
 
 	}
 );
-module.exports = mongoose.model('Chef',chefSchema);
+const recipe = mongoose.model('Recipe',Recipe);
+const chef = mongoose.model('Chef',chefSchema);
+module.exports = {
+	"recipe":recipe,
+	"chef": chef
+}

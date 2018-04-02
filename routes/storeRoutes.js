@@ -11,6 +11,7 @@ router.get("/getAllRaw",storeController.get_all_unregistered);
 
 router.get("/getAll",storeController.get_all);
 
+router.get("/getChef/:email",storeController.find_Chef_by_email);
 
 
 module.exports = router;
