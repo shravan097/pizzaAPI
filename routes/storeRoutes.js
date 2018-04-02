@@ -9,9 +9,11 @@ const storeController = require("../controllers/storeController");
 //Get all the un-registered stores
 router.get("/getAllRaw",storeController.get_all_unregistered);
 
-router.get("/getAll",storeController.get_all);
+router.get("/getAllStore",storeController.get_all);
 
 router.get("/getChef/:email",storeController.find_Chef_by_email);
+
+router.get("/:name/getAllMenu",storeController.getAllMenu);
 
 
 module.exports = router;

@@ -60,3 +60,94 @@ exports.find_Chef_by_email = (req,res,next) =>
 				});
 	});
 }
+
+/*
+	Gets all the menu for the given Pizza Store
+	Input: store name on URL:  /store/store_name/getAllMenu
+	Output: Array of all the recipe
+	Example: /store/ABC Pizza Store/getAllMenu
+	Returns: [
+    [
+        {
+            "rating": 0,
+            "_id": "5ac248440420e9749c419ae4",
+            "name": "Pineapple Pizza",
+            "price": 20,
+            "description": "Pizza topped with tomato sauce, cheese, pineapple, and Canadian bacon or ham. Some versions may include peppers, mushrooms, or bacon"
+        },
+        {
+            "rating": 0,
+            "_id": "5ac27832ef5fbc86664e56f3",
+            "name": "Apple Pizza",
+            "price": 18,
+            "description": "Pizza topped with tomato sauce, cheese, pineapple, and Canadian bacon or ham. Some versions may include peppers, mushrooms, or bacon"
+        }
+    ]
+] 
+	
+*/
+
+exports.getAllMenu = (req,res,next)=>
+{
+	storeSchema.findOne(req.params,"chefs").exec()
+	.then(async result=>{
+		if(result.length<1)
+		{
+
+			return res.status(409).json({
+				error_code:20,
+				message:"Store not registered by Manager yet"
+			});
+		}
+		else
+		{
+
+			let all_recipe= []
+			for(let i =0; i<result.chefs.email.length; ++i)
+			{
+				try{
+
+
+					let recipes = await chefSchema['chef'].findOne({"email":result.chefs.email[i]},"recipe").exec();
+					if(recipes!=null)
+					{
+
+						if(recipes.recipe.length!=0)
+						{
+							all_recipe.push(recipes.recipe);
+						}
+
+					}
+				}
+				catch(err)
+				{
+					return res.status(500).json({
+					message:"getAllMenu Database Error!"
+					});
+				}
+
+			}
+			console.log("Async Test2")
+			console.log(all_recipe);
+			return res.status(200).json(all_recipe);
+		}
+
+	}).catch(err2=>
+	{
+		console.log(err2);
+		return res.status(500).json({
+			message:"Database Error",
+			error: err
+		})
+	});
+
+}
+
+
+
+
+
+
+
+
+
