@@ -13,7 +13,7 @@ exports.get_all_unregistered = (req,res,next)=>
 
 exports.get_all = (req,res,next)=>
 {
-	storeSchema.find().exec()
+	storeSchema['store'].find().exec()
 	.then((result)=>
 	{
 		if(result.length<1){
@@ -89,7 +89,7 @@ exports.find_Chef_by_email = (req,res,next) =>
 
 exports.getAllMenu = (req,res,next)=>
 {
-	storeSchema.findOne(req.params,"chefs").exec()
+	storeSchema['store'].findOne(req.params,"chefs").exec()
 	.then(async result=>{
 		if(result.length<1)
 		{
@@ -138,6 +138,69 @@ exports.getAllMenu = (req,res,next)=>
 		return res.status(500).json({
 			message:"Database Error",
 			error: err
+		})
+	});
+
+}
+
+/*
+	Add Orders to the store current orders. ( POST Request)
+	Input:
+			{
+			"Store":"A 57th St Pizza Store",
+			"name": "Pineapple Pizza",
+			"quantity": 20
+
+		}
+
+	Output:
+			{
+		    "message": "Created Order!",
+		    "unique_conifmration": 1522797520040
+		}
+
+
+*/
+
+exports.add_order = (req,res,next) =>
+{
+	storeSchema['store'].findOne(req.body.store_name).exec()
+	.then((result)=>
+	{
+		if(result.length<1){
+			return res.status(409).json({
+					message:"No Store Registered by Manager Yet!"
+				});
+		}else
+		{
+			const order = new storeSchema['order']({
+				_id: mongoose.Types.ObjectId(),
+				name: req.body.name,
+				quantity:req.body.quantity
+			});
+			result.current_orders.push(order);
+			result.save()
+			.then((result2)=>
+			{
+				console.log(result);
+				result.current_orders.push(order);
+				res.status(201).json({
+				message:"Created Order!",
+				unique_conifmration: Date.now()
+			});
+			}).catch((err)=>
+			{
+				console.log("Error!")
+				res.status(500).json(err);
+				console.log('Promise Error Caught!');
+
+			});
+		}
+	}).catch((err2)=>
+	{
+		return res.status(500).json({
+			message:"Database Error",
+			error: err2
 		})
 	});
 

@@ -14,6 +14,7 @@ const customerSchema = mongoose.Schema({
 	// location:{type:String,required: true},
 	store_affiliated_with:{name:{type:Array, required:false,unique:true,default:[]}},
 	rating: {type:Number,required:false,default:0},
+	orders: {type:Array,required:false} 
 	}
 );
 module.exports = mongoose.model('customerSchema',customerSchema);

@@ -3,6 +3,15 @@
 
 const mongoose = require('mongoose');
 
+const order = mongoose.Schema(
+	{
+		_id:mongoose.Schema.Types.ObjectId,
+		name: { type:String, required:true},
+		//address
+		//method of payment
+		quantity:{type:Number, required:true}
+	});
+
 const storeSchema = mongoose.Schema(
 	{
 		_id: mongoose.Schema.Types.ObjectId,
@@ -17,7 +26,11 @@ const storeSchema = mongoose.Schema(
 		pending_customers:{
 			email:{type:Array,required:false,unique:true,default:[]}
 		},
-		blacklisted_customers:{email:{type:Array,required:false,unique:true,default:[]}}
+		blacklisted_customers:{email:{type:Array,required:false,unique:true,default:[]}},
+		current_orders:[order]
 	}
 );
-module.exports = mongoose.model('Store',storeSchema);
+const store = mongoose.model('Store',storeSchema);
+const Order = mongoose.model('Order',order);
+
+module.exports = {"store":store, "order":Order};

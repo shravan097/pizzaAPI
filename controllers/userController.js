@@ -51,7 +51,7 @@ exports.sign_up = (req,res,next)=>
 				});
 			}else{
 				//Check if store is already registered
-				storeSchema.find({name:req.body.store_affiliated_with})
+				storeSchema['store'].find({name:req.body.store_affiliated_with})
 						.exec()
 						.then(store=>{
 							if(store.length===1){
@@ -83,7 +83,7 @@ exports.sign_up = (req,res,next)=>
 							typeOfUser: req.body.typeOfUser
 						});
 
-						const storeModel = new storeSchema(
+						const storeModel = new storeSchema['store'](
 						{
 							_id: new mongoose.Types.ObjectId(),
 							name: req.body.store_affiliated_with,
@@ -118,7 +118,7 @@ exports.sign_up = (req,res,next)=>
 	if(typeOfUser==="Chef")
 	{
 		let selected_store;
-		storeSchema.find({name:req.body.store_affiliated_with})
+		storeSchema['store'].find({name:req.body.store_affiliated_with})
 		.exec()
 		.then(store=>{
 			if(store.length!=1){
