@@ -7,14 +7,33 @@ const storeSchema = require("../models/storeSchema");
 
 
 // Make order for visitor.  It will just store an order on Store and Manager will see it.
+
+/*
+	Add Orders to the store+Customer current orders. ( POST Request)
+	Input:
+			{
+			"Store":"A 57th St Pizza Store",
+			"name": "Pineapple Pizza",
+			"quantity": 20
+
+		}
+
+	Output:
+			{
+		    "message": "Created Order!",
+		    "unique_conifmration": 1522797520040
+		}
+
+
+*/
 exports.make_order = async (req,res,next)=>
 {
 	const confirmed= Date.now();
 
-	let findCustomer = await customerSchema.findOne({"email":req.body.email}).exec();
+	let findCustomer = await customerSchema.findOne({"email":req.userData.email}).exec();
 
 
-	storeSchema['store'].findOne({"store_name":req.body.store_name}).exec()
+	storeSchema['store'].findOne({"name":req.body.store_name}).exec()
 	.then((result)=>
 	{
 		if(result.length<1){
@@ -30,8 +49,15 @@ exports.make_order = async (req,res,next)=>
 				confirmation:confirmed
 
 			});
+			console.log(findCustomer);
 			result.current_orders.push(order);
-			findCustomer.orders.push(order);
+			console.log(req.userData)
+			if(findCustomer===null)
+				throw " Finding Customer Error. Make sure all the information are inputted properly!"
+			findCustomer.orders.push(order);	
+	
+
+
 			Promise.all([result.save(),findCustomer.save()])
 			.then((result1,result2)=>
 			{
