@@ -12,6 +12,7 @@ const deliverySchema = mongoose.Schema({
 },
 	location:{type:String,required:true},
 	rating: {type:Number,required:true}
+	
 
 	}
 );

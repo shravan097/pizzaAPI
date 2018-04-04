@@ -7,6 +7,7 @@ const order = mongoose.Schema(
 	{
 		_id:mongoose.Schema.Types.ObjectId,
 		name: { type:String, required:true},
+		confirmation:{type:Number,required:true},
 		//address
 		//method of payment
 		quantity:{type:Number, required:true}

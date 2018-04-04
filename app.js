@@ -27,6 +27,9 @@ const store = require('./routes/storeRoutes');
 //Chef Route
 const chef = require('./routes/chefRoutes');
 
+//Customer Route
+const customer = require('./routes/customerRoutes');
+
 
 var app = express();
 
@@ -46,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/store',store)
 app.use('/', users);
 app.use('/chef',chef);
+app.use('/customer',customer);
 
 
 // catch 404 and forward to error handler

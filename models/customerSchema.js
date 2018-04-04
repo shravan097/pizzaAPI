@@ -17,4 +17,4 @@ const customerSchema = mongoose.Schema({
 	orders: {type:Array,required:false} 
 	}
 );
-module.exports = mongoose.model('customerSchema',customerSchema);
+module.exports = mongoose.model('customer',customerSchema);

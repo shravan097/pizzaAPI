@@ -164,6 +164,7 @@ exports.getAllMenu = (req,res,next)=>
 
 exports.add_order = (req,res,next) =>
 {
+	const confirmed= Date.now();
 	storeSchema['store'].findOne(req.body.store_name).exec()
 	.then((result)=>
 	{
@@ -176,17 +177,18 @@ exports.add_order = (req,res,next) =>
 			const order = new storeSchema['order']({
 				_id: mongoose.Types.ObjectId(),
 				name: req.body.name,
-				quantity:req.body.quantity
+				quantity:req.body.quantity,
+				confirmation:confirmed
+
 			});
 			result.current_orders.push(order);
 			result.save()
 			.then((result2)=>
 			{
-				console.log(result);
-				result.current_orders.push(order);
+				console.log(result2);
 				res.status(201).json({
 				message:"Created Order!",
-				unique_conifmration: Date.now()
+				unique_conifmration: confirmed
 			});
 			}).catch((err)=>
 			{

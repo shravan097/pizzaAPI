@@ -15,5 +15,6 @@ const managerSchema = mongoose.Schema({
 	name: {type:String,required:true},
 	store_affiliated_with: {type:String, required:true}
 
+
 });
 module.exports = mongoose.model('Manager',managerSchema);

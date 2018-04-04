@@ -7,7 +7,7 @@ const userController = require("../controllers/userController");
 
 
 //Get all Manager
-router.get("/getAll",checkAuth,userController.get_all);
+router.get("/getAll",checkAuth.checkManager,userController.get_all);
 
 //User Sign Up
 router.post("/signup",userController.sign_up);
