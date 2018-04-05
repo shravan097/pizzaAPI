@@ -209,6 +209,69 @@ exports.add_order = (req,res,next) =>
 }
 
 
+// Sign Up for the Store
+//Assuming the Customer already signed up as user and is LOGGED IN
+/*
+	Example:
+		Input: store/signup/A 57th St Pizza Store
+		Output: 
+			{
+				message:"User succesfully listed on Pending List. Manager Needs to Approve!"
+			}
+			OR
+			{
+			    "message": "Database Error",
+			    "error": "User Already on Pending List"
+			}
+
+*/
+
+
+exports.sign_up = (req,res,next) =>
+{
+	storeSchema['store'].findOne(req.params.store_name).exec()
+	.then(async(result)=>
+	{
+		console.log(req.userData);
+		if(result.length<1){
+			return res.status(409).json({
+					message:"No Store Registered by Manager Yet!"
+				});
+		}else
+		{
+
+			let x = await storeSchema['store'].findOne(req.params.store_name).exec();
+			console.log(x);
+			for(let i = 0 ; i< x.pending_customers.email.length;++i)
+				if(x.pending_customers.email[i] === req.userData.email)
+					throw "User Already on Pending List";
+
+			result.pending_customers.email.push(req.userData.email);
+			result.save()
+			.then((result2)=>
+			{
+				console.log(result2);
+				res.status(201).json({
+				message:"User succesfully listed on Pending List. Manager Needs to Approve!",
+			});
+			}).catch((err)=>
+			{
+				console.log("Error!")
+				res.status(500).json(err);
+				console.log('Promise Error Caught!');
+
+			});
+		}
+	}).catch((err2)=>
+	{
+		return res.status(500).json({
+			message:"Database Error",
+			error: err2
+		})
+	});
+
+}
+
 
 
 

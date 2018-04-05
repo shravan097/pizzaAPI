@@ -16,6 +16,8 @@ router.get("/getChef/:email",storeController.find_Chef_by_email);
 router.get("/:name/getAllMenu",storeController.getAllMenu);
 router.post("/makeVisitorOrder",storeController.add_order);
 
+router.post("/signup/:name",checkAuth.checkCustomer,storeController.sign_up);
+
 
 module.exports = router;
 
