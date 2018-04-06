@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
-const chefSchema = require('../models/chefSchema')
+const chefSchema = require('../models/chefSchema');
 const stores = require('../stores_list');
-const storeSchema = require("../models/storeSchema")
+const storeSchema = require("../models/storeSchema");
+
 
 exports.get_all_unregistered = (req,res,next)=>
 {

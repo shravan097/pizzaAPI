@@ -13,9 +13,7 @@ const userSchema = mongoose.Schema({
 		type:String,
 		enum:['Manager','Chef','Customer','Delivery'],
 		required: true
-	},
-	hasFilledAll:{type: Boolean, required:false, default:false}
-
 	}
-);
+
+});
 module.exports = mongoose.model('User',userSchema);

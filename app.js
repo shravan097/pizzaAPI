@@ -30,6 +30,9 @@ const chef = require('./routes/chefRoutes');
 //Customer Route
 const customer = require('./routes/customerRoutes');
 
+//Manager Routes
+const manager = require('./routes/managerRoutes');
+
 
 var app = express();
 
@@ -50,6 +53,7 @@ app.use('/store',store)
 app.use('/', users);
 app.use('/chef',chef);
 app.use('/customer',customer);
+app.use('/manager',manager);
 
 
 // catch 404 and forward to error handler
