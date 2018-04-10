@@ -8,7 +8,16 @@ const chefSchema = require("../models/chefSchema");
 /*
 Adds Recipe
 Chef must be autheticated with token
-Input: chefID, recipe
+Input: 
+	"email": "chef1@test.com",
+	"recipe":{
+		"name":"Apple Pizza",
+		"price":18.00,
+		"description":"Pizza topped with tomato sauce, cheese, pineapple, and Canadian bacon or ham. Some versions may include peppers, mushrooms, or bacon"
+	}
+
+
+chefEmail, recipe
 		Recipe: 
 			_id:mongoose.Schema.Types.ObjectId,
 			name:{type:String,required:true},

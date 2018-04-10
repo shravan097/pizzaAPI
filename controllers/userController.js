@@ -38,8 +38,6 @@ exports.sign_up = (req,res,next)=>
 	//Manager Sign Up
 	if(typeOfUser==="Manager")
 	{
-
-
 		
 		//Check If User Exists
 		User.find({email: req.body.email})
@@ -302,7 +300,7 @@ exports.login = (req,res,next)=>
 			});
 		}
 		if(user[0].typeOfUser != req.body.typeOfUser)
-			throw "User Invalid!"
+			throw "JSON Form Incomplete! Check the input again"
 		bcrypt.compare(req.body.password,user[0].password,(err,result)=>
 		{
 			if(err){
