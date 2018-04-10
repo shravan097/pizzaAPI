@@ -101,19 +101,19 @@ exports.approve_customer = async (req,res,next) =>
 	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"pending_customers registered_customers").exec()
 	.then((result)=>
 	{
-		emailIndex = result.pending_customers.email.indexOf(req.email);
+		emailIndex = result.pending_customers.email.indexOf(req.body.email);
 		if(emailIndex>-1)
 			result.pending_customers.email.splice(emailIndex,1);
 		else
 			throw "Customer Email Not on Pending List"
-		result.registered_customers.email.push(req.email);
+		result.registered_customers.email.push(req.body.email);
 
 		result.save()
 			.then((result2)=>
 			{
 				console.log(result2);
 				res.status(201).json({
-				message:"User succesfully listed on Pending List. Manager Needs to Approve!",
+				message:"User succesfully moved to Registered Customers!",
 			});
 			}).catch((err2)=>
 			{
@@ -122,8 +122,6 @@ exports.approve_customer = async (req,res,next) =>
 				console.log('Saving Approve Customer Err\nPromise Error Caught!');
 
 			});
-
-		 res.status(202).json(result);
 	}).catch((err)=>
 	{
 		return res.status(500).json({
