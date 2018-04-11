@@ -18,6 +18,8 @@ router.get("/getAllBlacklistedCustomers",checkAuth.checkManager,managerControlle
 
 router.post("/approveCustomer",checkAuth.checkManager,managerController.approve_customer);
 
+router.post("/blacklistCustomer",checkAuth.checkManager,managerController.blacklist_customer);
+
 
 module.exports = router;
 

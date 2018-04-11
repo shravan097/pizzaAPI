@@ -15,6 +15,8 @@ NPM packages should be preinstalled.  If not, please do:
 
 before initial run.
 
+**Runs on localhost with port=3001**
+
 # [Documentations](https://github.com/shravan097/pizzaAPI/wiki/Documentation)
  
 

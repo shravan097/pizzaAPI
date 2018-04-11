@@ -136,6 +136,45 @@ exports.approve_customer = async (req,res,next) =>
 // Put Customer on BlackList
 
 
+exports.blacklist_customer = async (req,res,next) =>
+{
+	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
+	
+	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"blacklisted_customers registered_customers").exec()
+	.then((result)=>
+	{
+		emailIndex = result.registered_customers.email.indexOf(req.body.email);
+		if(emailIndex>-1)
+			result.registered_customers.email.splice(emailIndex,1);
+		else
+			throw "Customer Email Not on Registered List"
+
+		console.log(result);
+		result.blacklisted_customers.email.push(req.body.email);
+
+
+		result.save()
+			.then((result2)=>
+			{
+				console.log(result2);
+				res.status(201).json({
+				message:"User succesfully moved to BlackListed Customers!",
+			});
+			}).catch((err2)=>
+			{
+				console.log("Error!")
+				res.status(500).json(err2);
+				console.log('Saving BlackList Customer Err\nPromise Error Caught!');
+
+			});
+	}).catch((err)=>
+	{
+		return res.status(500).json({
+			message:"Database Error",
+			error: err
+		})
+	});
+}
 
 
 
