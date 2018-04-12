@@ -6,11 +6,15 @@ const mongoose = require('mongoose');
 const order = mongoose.Schema(
 	{
 		_id:mongoose.Schema.Types.ObjectId,
-		name: { type:String, required:true},
-		confirmation:{type:Number,required:false},
+		//Order for Items in Carts
+		items: [{
+			name:{type:String,required:true},
+			quantity:{type:Number,required:true}
+		}],
+		confirmation:{type:Number,required:false}
+		//total cost
 		//address
 		//method of payment
-		quantity:{type:Number, required:true}
 	});
 
 const storeSchema = mongoose.Schema(

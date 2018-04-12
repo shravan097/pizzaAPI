@@ -149,9 +149,13 @@ exports.getAllMenu = (req,res,next)=>
 	Input:
 			{
 			"Store":"A 57th St Pizza Store",
-			"name": "Pineapple Pizza",
-			"quantity": 20
+			"items":[
+				{
+					name": "Pineapple Pizza",
+					"quantity": 20
 
+				}
+			]
 		}
 
 	Output:
@@ -177,10 +181,8 @@ exports.add_order = (req,res,next) =>
 		{
 			const order = new storeSchema['order']({
 				_id: mongoose.Types.ObjectId(),
-				name: req.body.name,
-				quantity:req.body.quantity,
+				items: req.body.items,
 				confirmation:confirmed
-
 			});
 			result.current_orders.push(order);
 			result.save()
