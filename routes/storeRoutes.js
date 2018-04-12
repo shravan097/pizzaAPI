@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const checkAuth = require("../authenticate");
 const storeController = require("../controllers/storeController");
 
@@ -20,5 +20,3 @@ router.post("/signup/:name",checkAuth.checkCustomer,storeController.sign_up);
 
 
 module.exports = router;
-
-

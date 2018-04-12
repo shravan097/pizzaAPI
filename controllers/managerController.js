@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
 const chefSchema = require('../models/chefSchema');
@@ -55,7 +55,7 @@ exports.get_all_pending_customers = async (req,res,next) =>
 exports.get_all_registered_customers = async(req,res,next) =>
 {
 	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
-	
+
 
 	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"registered_customers").exec()
 	.then((result)=>
@@ -73,7 +73,7 @@ exports.get_all_registered_customers = async(req,res,next) =>
 exports.get_all_blacklisted_customers = async(req,res,next) =>
 {
 	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
-	
+
 
 	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"blacklisted_customers").exec()
 	.then((result)=>
@@ -97,7 +97,7 @@ exports.get_all_blacklisted_customers = async(req,res,next) =>
 exports.approve_customer = async (req,res,next) =>
 {
 	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
-	
+
 	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"pending_customers registered_customers").exec()
 	.then((result)=>
 	{
@@ -139,7 +139,7 @@ exports.approve_customer = async (req,res,next) =>
 exports.blacklist_customer = async (req,res,next) =>
 {
 	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
-	
+
 	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"blacklisted_customers registered_customers").exec()
 	.then((result)=>
 	{
@@ -175,9 +175,3 @@ exports.blacklist_customer = async (req,res,next) =>
 		})
 	});
 }
-
-
-
-
-
-

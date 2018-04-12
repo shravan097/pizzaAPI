@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/userSchema");
 const Manager = require("../models/managerSchema");
 const Chef = require("../models/chefSchema");
@@ -38,7 +38,7 @@ exports.sign_up = (req,res,next)=>
 	//Manager Sign Up
 	if(typeOfUser==="Manager")
 	{
-		
+
 		//Check If User Exists
 		User.find({email: req.body.email})
 		.exec()
@@ -87,7 +87,7 @@ exports.sign_up = (req,res,next)=>
 							name: req.body.store_affiliated_with,
 							manager_email:req.body.email,
 						});
-						
+
 						Promise.all([
 							user.save(),
 							manager.save(),
@@ -285,7 +285,7 @@ exports.sign_up = (req,res,next)=>
 	// 	});
 	// }
 
-	
+
 };
 
 exports.login = (req,res,next)=>
@@ -337,8 +337,3 @@ exports.login = (req,res,next)=>
       });
     });
 };
-
-
-
-
-

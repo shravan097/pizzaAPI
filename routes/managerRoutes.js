@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const checkAuth = require("../authenticate");
 const managerController = require("../controllers/managerController");
 
@@ -22,5 +22,3 @@ router.post("/blacklistCustomer",checkAuth.checkManager,managerController.blackl
 
 
 module.exports = router;
-
-

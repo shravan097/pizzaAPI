@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
 const customerSchema = require("../models/customerSchema");
@@ -16,7 +16,7 @@ const storeSchema = require("../models/storeSchema");
 			"items":[
 				{
 						"name":"Apple Pizza",
-						"quantity":18	
+						"quantity":18
 				},
 				{
 					"name":"Pineapple Pizza",
@@ -24,7 +24,7 @@ const storeSchema = require("../models/storeSchema");
 				}
 			]
 
-			
+
 		}
 
 	Output:
@@ -62,8 +62,8 @@ exports.make_order = async (req,res,next)=>
 			console.log(req.userData)
 			if(findCustomer===null)
 				throw " Finding Customer Error. Make sure all the information are inputted properly!"
-			findCustomer.orders.push(order);	
-	
+			findCustomer.orders.push(order);
+
 
 
 			Promise.all([result.save(),findCustomer.save()])
@@ -90,5 +90,5 @@ exports.make_order = async (req,res,next)=>
 	});
 
 
-	
+
 }

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
 const chefSchema = require("../models/chefSchema");
@@ -8,7 +8,7 @@ const chefSchema = require("../models/chefSchema");
 /*
 Adds Recipe
 Chef must be autheticated with token
-Input: 
+Input:
 	"email": "chef1@test.com",
 	"recipe":{
 		"name":"Apple Pizza",
@@ -18,7 +18,7 @@ Input:
 
 
 chefEmail, recipe
-		Recipe: 
+		Recipe:
 			_id:mongoose.Schema.Types.ObjectId,
 			name:{type:String,required:true},
 			price:{type: Number, required:true},
@@ -54,7 +54,7 @@ exports.add_recipe = (req,res,next)=>
 				});
 		});
 
-	
-		
+
+
 
 }

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
 const chefSchema = require('../models/chefSchema');
@@ -36,7 +36,7 @@ exports.get_all = (req,res,next)=>
 
 /*
 	Finds Chef Details
-	Input: Chef email given on URL 
+	Input: Chef email given on URL
 	Output: JSON Data of that chef
 	Example: /store/getChef/chef1@test.com
 */
@@ -84,8 +84,8 @@ exports.find_Chef_by_email = (req,res,next) =>
             "description": "Pizza topped with tomato sauce, cheese, pineapple, and Canadian bacon or ham. Some versions may include peppers, mushrooms, or bacon"
         }
     ]
-] 
-	
+]
+
 */
 
 exports.getAllMenu = (req,res,next)=>
@@ -151,7 +151,7 @@ exports.getAllMenu = (req,res,next)=>
 			"items":[
 				{
 						"name":"Apple Pizza",
-						"quantity":18	
+						"quantity":18
 				},
 				{
 					"name":"Pineapple Pizza",
@@ -159,7 +159,7 @@ exports.getAllMenu = (req,res,next)=>
 				}
 			]
 
-			
+
 		}
 
 	Output:
@@ -221,7 +221,7 @@ exports.add_order = (req,res,next) =>
 /*
 	Example:
 		Input: store/signup/A 57th St Pizza Store
-		Output: 
+		Output:
 			{
 				message:"User succesfully listed on Pending List. Manager Needs to Approve!"
 			}
@@ -278,11 +278,3 @@ exports.sign_up = (req,res,next) =>
 	});
 
 }
-
-
-
-
-
-
-
-
