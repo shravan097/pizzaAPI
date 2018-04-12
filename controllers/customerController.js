@@ -11,11 +11,20 @@ const storeSchema = require("../models/storeSchema");
 /*
 	Add Orders to the store+Customer current orders. ( POST Request)
 	Input:
-			{
-			"Store":"A 57th St Pizza Store",
-			"name": "Pineapple Pizza",
-			"quantity": 20
+		{
+			"store_name":"ABC 50th Street Pizza",
+			"items":[
+				{
+						"name":"Apple Pizza",
+						"quantity":18	
+				},
+				{
+					"name":"Pineapple Pizza",
+					"quantity": 20
+				}
+			]
 
+			
 		}
 
 	Output:
@@ -44,8 +53,7 @@ exports.make_order = async (req,res,next)=>
 		{
 			const order = new storeSchema['order']({
 				_id: mongoose.Types.ObjectId(),
-				name: req.body.name,
-				quantity:req.body.quantity,
+				items: req.body.items,
 				confirmation:confirmed
 
 			});

@@ -147,15 +147,19 @@ exports.getAllMenu = (req,res,next)=>
 /*
 	Add Orders to the store current orders. ( POST Request)
 	Input:
-			{
-			"Store":"A 57th St Pizza Store",
+		{
 			"items":[
 				{
-					name": "Pineapple Pizza",
+						"name":"Apple Pizza",
+						"quantity":18	
+				},
+				{
+					"name":"Pineapple Pizza",
 					"quantity": 20
-
 				}
 			]
+
+			
 		}
 
 	Output:
