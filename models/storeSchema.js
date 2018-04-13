@@ -21,17 +21,17 @@ const storeSchema = mongoose.Schema(
 	{
 		_id: mongoose.Schema.Types.ObjectId,
 		name:{ type:String,required: true,unique:true},
-		manager_email:{type:String,required:false,unique:true},
+		manager_email:{type:String,required:false,unique:false,index: false},
 		//Location Set to False for initial testing
 		location:{type:String,required:false},
 		rating: {type:Number,required:false,default:0},
-		chefs: {email:{type:Array,required:false,unique:true,default:[]}},
+		chefs: {email:{type:Array,required:false,unique:true,index:false ,default:[]}},
 		//Store has Bunch of Customers that must be approved by Manager
-		registered_customers:{email:{type:Array,required:false,unique:true,default:[]}},
+		registered_customers:{email:{type:Array,required:false,unique:true,index: false,default:[]}},
 		pending_customers:{
-			email:{type:Array,required:false,unique:true,default:[]}
+			email:{type:Array,required:false,unique:true,index: false,default:[]}
 		},
-		blacklisted_customers:{email:{type:Array,required:false,unique:true,default:[]}},
+		blacklisted_customers:{email:{type:Array,required:false,unique:true,index: false,default:[]}},
 		current_orders:[order]
 	}
 );

@@ -282,9 +282,9 @@ exports.sign_up = (req,res,next) =>
 
 
 // Get Top 3 Stores
-exports.getTopThree = async (req,res,next)=>{
+exports.getTopThree =  (req,res,next)=>{
 
-	storeSchema['store'].find().sort("rating").limit(3).exec()
+	storeSchema['store'].find().sort({"rating":-1}).limit(3).exec()
 	.then((result)=>
 	{
 		if(result.length<1){
@@ -303,7 +303,34 @@ exports.getTopThree = async (req,res,next)=>{
 		})
 	});
 
+}
 
+//Rate Store Test
+/* Should be implemented on Customers.  Customer can only 
+	rate if they are in Store's Registered Customer list
+
+	Only provide rate change method for those customers on pending
+*/
+
+exports.changeRating = (req,res,next)=>{
+	storeSchema['store'].findOneAndUpdate({"name":req.params.name},{"rating":req.params.rating},{"new":true})
+	.then((result)=>
+	{
+		if(result.length<1){
+			return res.status(409).json({
+					message:"No Store Registered by Manager Yet!"
+				});
+		}else
+		{
+			return res.status(202).json(result);
+		}
+	}).catch((err)=>
+	{
+		return res.status(500).json({
+			message:"Change Rating; Database Error ",
+			error: err
+		})
+	});
 }
 
 
