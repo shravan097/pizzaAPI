@@ -278,3 +278,34 @@ exports.sign_up = (req,res,next) =>
 	});
 
 }
+
+
+
+// Get Top 3 Stores
+exports.getTopThree = async (req,res,next)=>{
+
+	storeSchema['store'].find().sort("rating").limit(3).exec()
+	.then((result)=>
+	{
+		if(result.length<1){
+			return res.status(409).json({
+					message:"No Store Registered by Manager Yet!"
+				});
+		}else
+		{
+			return res.status(202).json(result);
+		}
+	}).catch((err)=>
+	{
+		return res.status(500).json({
+			message:"Database Error",
+			error: err
+		})
+	});
+
+
+}
+
+
+
+

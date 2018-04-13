@@ -18,5 +18,7 @@ router.post("/makeVisitorOrder",storeController.add_order);
 
 router.post("/signup/:name",checkAuth.checkCustomer,storeController.sign_up);
 
+router.get("/getTop",storeController.getTopThree);
+
 
 module.exports = router;
