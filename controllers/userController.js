@@ -16,6 +16,7 @@ exports.getStoreList = (req,res,next)=>
 }
 exports.get_all = (req,res,next)=>
 {
+
 	console.log(process.env.JWT_KEY)
 	User.find()
 	.exec()
@@ -32,6 +33,7 @@ exports.get_all = (req,res,next)=>
 
 exports.sign_up = (req,res,next)=>
 {
+	console.log(req);
 	const typeOfUser = req.body.typeOfUser;
 
 
@@ -290,6 +292,7 @@ exports.sign_up = (req,res,next)=>
 
 exports.login = (req,res,next)=>
 {
+	console.log(req);
 	console.log(key.env.JWT_KEY);
 	User.find({email:req.body.email})
 	.exec()

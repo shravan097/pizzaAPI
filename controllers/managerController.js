@@ -138,6 +138,7 @@ exports.approve_customer = async (req,res,next) =>
 
 exports.blacklist_customer = async (req,res,next) =>
 {
+	
 	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
 
 	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"blacklisted_customers registered_customers").exec()

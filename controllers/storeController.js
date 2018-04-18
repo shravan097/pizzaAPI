@@ -249,9 +249,11 @@ exports.sign_up = (req,res,next) =>
 
 			let x = await storeSchema['store'].findOne(req.params.store_name).exec();
 			console.log(x);
+			
 			for(let i = 0 ; i< x.pending_customers.email.length;++i)
 				if(x.pending_customers.email[i] === req.userData.email)
-					throw "User Already on Pending List";
+					res.status(409).json({message:"User Already on Pending List"});
+
 
 			result.pending_customers.email.push(req.userData.email);
 			result.save()

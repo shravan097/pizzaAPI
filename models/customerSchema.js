@@ -13,7 +13,7 @@ const customerSchema = mongoose.Schema({
 	name:{ type:String,required: true},
 	//	We will add 
 	// location:{type:String,required: true},
-	store_affiliated_with:{name:{type:Array, required:false,unique:true,default:[]}},
+	store_affiliated_with:{name:{type:Array, required:false}},
 	rating: {type:Number,required:false,default:0},
 	orders: {type:Array,required:false} 
 	}
