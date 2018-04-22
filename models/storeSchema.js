@@ -28,9 +28,9 @@ const storeSchema = mongoose.Schema(
 		//Will provide checks on controller so chefs and customers are never duplicated.
 		chefs: {email:{type:Array,required:false}},
 		//Store has Bunch of Customers that must be approved by Manager
-		registered_customers:{email:{type:Array,required:false}},
-		pending_customers:{	email:{type:Array,required:false}},
-		blacklisted_customers:{email:{type:Array,required:false}},
+		registered_customers:{email:{type:Array,required:false,index:false,sparse:true}},
+		pending_customers:{	email:{type:Array,required:false,index:false,sparse:true}},
+		blacklisted_customers:{email:{type:Array,required:false,index:false,sparse:true}},
 		current_orders:[order]
 	}
 );

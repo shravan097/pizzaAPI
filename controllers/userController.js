@@ -31,9 +31,9 @@ exports.get_all = (req,res,next)=>
 	});
 };
 
-exports.sign_up = (req,res,next)=>
+exports.sign_up = async (req,res,next)=>
 {
-	console.log(req);
+	console.log(req.body);
 	const typeOfUser = req.body.typeOfUser;
 
 
@@ -107,31 +107,27 @@ exports.sign_up = (req,res,next)=>
 						{
 							console.log("Error!")
 							res.status(500).json(err);
-							console.log('Promise Error Caught!');
+							console.log('Promise Error Caught! Error: ',err);
 
 						});
 					}
 				});
 			}
+		}).catch(err=>{
+			console.log("Error : ",err);
+			res.status(500).json(err);
+			console.log("Error Finding user!");
 		});
 	}
 	if(typeOfUser==="Chef")
 	{
-		let selected_store;
-		storeSchema['store'].find({name:req.body.store_affiliated_with})
-		.exec()
-		.then(store=>{
-			if(store.length!=1){
+		let selected_store = await storeSchema['store'].find({name:req.body.store_affiliated_with}).exec()
+		if(selected_store && selected_store.length!=1){
 				return res.status(409).json({
 					error_code:20,
 					message:"Store not registered by Manager yet"
 				});
 			}
-			else{
-				selected_store = store;
-			}
-		});
-
 		User.find({email: req.body.email})
 		.exec()
 		.then(user =>{
@@ -178,13 +174,17 @@ exports.sign_up = (req,res,next)=>
 						}).catch((err)=>
 						{
 							console.log("Error!")
-							res.status(500).json(err);
-							console.log('Promise Error Caught!');
+							res.status(500).json(err);							
+							console.log('Promise Error Caught! Error: ',err);
 
 						});
 					}
 				});
 			}
+		}).catch(err=>{
+			console.log("Error : ",err);
+			res.status(500).json(err);
+			console.log("Error Finding user!");
 		});
 	}
 
@@ -204,6 +204,7 @@ exports.sign_up = (req,res,next)=>
 				{
 					if(err){
 						return res.status(500).json({
+							message:"Hashing Error",
 							error: err
 						});
 					}else{
@@ -234,12 +235,16 @@ exports.sign_up = (req,res,next)=>
 						{
 							console.log("Error!")
 							res.status(500).json(err);
-							console.log('Promise Error Caught!');
+							console.log('Promise Error Caught! Error: ',err);
 
 						});
 					}
 				});
 			}
+		}).catch(err=>{
+			console.log("Error : ",err);
+			res.status(500).json(err);
+			console.log("Error Finding user!");
 		});
 	}
 
@@ -302,8 +307,7 @@ exports.login = (req,res,next)=>
 				message:"Auth Failed"
 			});
 		}
-		if(user[0].typeOfUser != req.body.typeOfUser)
-			throw "JSON Form Incomplete! Check the input again"
+
 		bcrypt.compare(req.body.password,user[0].password,(err,result)=>
 		{
 			if(err){
