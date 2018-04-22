@@ -90,9 +90,9 @@ exports.find_Chef_by_email = (req,res,next) =>
 
 exports.getAllMenu = (req,res,next)=>
 {
-	storeSchema['store'].findOne(req.params,"chefs").exec()
+	storeSchema['store'].findOne({"name":req.params.name},"chefs").exec()
 	.then(async result=>{
-		if(result.length<1)
+		if(!result)
 		{
 
 			return res.status(409).json({
@@ -123,7 +123,8 @@ exports.getAllMenu = (req,res,next)=>
 				catch(err)
 				{
 					return res.status(500).json({
-					message:"getAllMenu Database Error!"
+					message:"getAllMenu Database Error!",
+					error:err
 					});
 				}
 
@@ -138,7 +139,7 @@ exports.getAllMenu = (req,res,next)=>
 		console.log(err2);
 		return res.status(500).json({
 			message:"Database Error",
-			error: err
+			error: err2
 		})
 	});
 
@@ -249,7 +250,7 @@ exports.sign_up = (req,res,next) =>
 
 			let x = await storeSchema['store'].findOne(req.params.store_name).exec();
 			console.log(x);
-			
+
 			for(let i = 0 ; i< x.pending_customers.email.length;++i)
 				if(x.pending_customers.email[i] === req.userData.email)
 					res.status(409).json({message:"User Already on Pending List"});
