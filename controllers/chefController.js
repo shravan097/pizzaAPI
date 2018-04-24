@@ -76,3 +76,65 @@ exports.my_menu = (req,res,next)=>
 
 
 }
+
+
+//Parameters :  chef_email, menu_id, new_price
+/* Sample Example: 
+	{
+		"email":"testChef@test.com",
+		"id": "5ade8a44ecaab7ac3335b83f",
+		"new_price":20
+	}
+
+	Output:
+	{
+    	"message": "Price updated!"
+	}
+
+*/
+exports.change_price = async (req,res,next)=>
+{
+	console.log(req.body);
+		let chefRecipe = null;
+		try{
+			chefRecipe = await chefSchema['chef'].findOne({"email":req.body.email},"recipe").exec();
+		}catch(err)
+		{
+			return 'Change Price: Finding Chef DB Error occured';
+		}
+		
+		let pos = -1;
+		for(let i = 0; i<chefRecipe.recipe.length; ++i)
+		{
+			const targetObjId = mongoose.Types.ObjectId(req.body.id);
+			if(chefRecipe.recipe[i]._id.equals(targetObjId))
+			{
+				pos = i;
+				break;
+			}
+
+		}
+		if(pos!=-1)
+		{
+
+			chefRecipe.recipe[pos].price = req.body.new_price;
+			chefRecipe.save()
+			.then((result2)=>
+			{
+				res.status(201).json({
+				message:"Price updated!",
+			});
+			}).catch((err2)=>
+			{
+				console.log("Error while updating Price!")
+				res.status(500).json(err2);
+				console.log('Saving Price Err\nPromise Error Caught!');
+
+			});
+		}else
+		{
+			res.status(500).json("Object ID Error");
+		}
+
+
+}

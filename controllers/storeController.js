@@ -104,6 +104,7 @@ exports.getAllMenu = (req,res,next)=>
 		{
 
 			let all_recipe= []
+			console.log(result.chefs.email);
 			for(let i =0; i<result.chefs.email.length; ++i)
 			{
 				try{
