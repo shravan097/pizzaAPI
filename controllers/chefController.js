@@ -50,11 +50,29 @@ exports.add_recipe = (req,res,next)=>
 			})
 	.catch(err=>{
 		return res.status(500).json({
-					message:"Adding Recipe Database Error!"
+					message:"Adding Recipe Database Error!",
+					"error":error
 				});
 		});
 
 
+
+
+}
+
+
+exports.my_menu = (req,res,next)=>
+{
+	chefSchema['chef'].findOne({"email":req.body.email},"recipe")
+	.then(result=>{
+		return res.status(201).json(result);
+	}).catch(error=>
+	{
+		return res.status(500).json({
+					message:"Retrieving Menu Database Error!",
+					"error":error
+				});	
+	});
 
 
 }

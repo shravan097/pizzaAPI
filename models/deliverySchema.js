@@ -11,7 +11,8 @@ const deliverySchema = mongoose.Schema({
 		match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 },
 	location:{type:String,required:true},
-	rating: {type:Number,required:true}
+	rating: {type:Number,required:true},
+	salaryPaid: {type:Number,required:false,default:0}
 	
 
 	}

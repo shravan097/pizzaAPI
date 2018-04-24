@@ -41,7 +41,6 @@ exports.make_order = async (req,res,next)=>
 
 	let findCustomer = await customerSchema.findOne({"email":req.userData.email}).exec();
 
-
 	storeSchema['store'].findOne({"name":req.body.store_name}).exec()
 	.then((result)=>
 	{
@@ -88,7 +87,4 @@ exports.make_order = async (req,res,next)=>
 			error: err2
 		})
 	});
-
-
-
 }

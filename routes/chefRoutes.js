@@ -11,7 +11,7 @@ const chefController = require("../controllers/chefController")
 //Add Recipe Route
 router.post("/addRecipe",checkAuth.checkChef,chefController.add_recipe);
 
-
+router.post("/getMenu",checkAuth.checkChef,chefController.my_menu);
 
 
 
