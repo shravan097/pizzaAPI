@@ -31,6 +31,7 @@ const storeSchema = mongoose.Schema(
 		registered_customers:{email:{type:Array,required:false,index:false,sparse:true}},
 		pending_customers:{	email:{type:Array,required:false,index:false,sparse:true}},
 		blacklisted_customers:{email:{type:Array,required:false,index:false,sparse:true}},
+		vip_customer:{email:{type:String,required:false,index:false,sparse:true}},
 		current_orders:[order]
 	}
 );

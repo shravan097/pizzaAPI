@@ -138,7 +138,6 @@ exports.approve_customer = async (req,res,next) =>
 
 exports.blacklist_customer = async (req,res,next) =>
 {
-	
 	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
 
 	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with},"blacklisted_customers registered_customers").exec()
@@ -176,3 +175,21 @@ exports.blacklist_customer = async (req,res,next) =>
 		})
 	});
 }
+
+
+//Returns Store of the Manager Affiliated With
+//Type : GET, requires authentication
+// Input: /manager/getStoreName
+//Output: StoreName
+
+exports.getStoreName = async(req,res,next)=>
+{
+
+	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
+
+	return res.status(201).json(selected_manager.store_affiliated_with);
+
+
+}
+
+
