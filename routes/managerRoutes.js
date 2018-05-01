@@ -22,5 +22,7 @@ router.post("/blacklistCustomer",checkAuth.checkManager,managerController.blackl
 
 router.get("/getStoreName",checkAuth.checkManager,managerController.getStoreName);
 
+router.post('/changePrice',checkAuth.checkManager,managerController.changePrice);
+
 
 module.exports = router;

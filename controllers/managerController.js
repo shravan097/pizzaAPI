@@ -193,3 +193,86 @@ exports.getStoreName = async(req,res,next)=>
 }
 
 
+//I should have made this function earlier when doing chef so I am aware of my poor design.
+
+//Changes price of menu item given object id
+// Type: POST, requires authentication
+/* Input: 	"id": "5ae507f8ba6abb24ce092fc8",
+			"new_price":20
+
+	Output:  "Price Updated " OR ERR MSG
+
+*/
+
+exports.changePrice = async (req,res,next)=>
+{
+	let chefs = null;
+	let chefRecipe = null;
+	let pos = -1;
+	try{
+		 chefs = await storeSchema['store'].findOne({"manager_email":req.userData.email},"chefs");
+	}catch(err)
+	{
+
+	   res.status(500).json({"ChangePrice ChefRecipe Error":err});
+	   return;
+	}
+	
+	console.log(chefs.chefs.email);
+	for(let i = 0; i< chefs.chefs.email.length ; ++i)
+	{
+		try{
+			 chefRecipe = await chefSchema['chef'].findOne({'email':chefs.chefs.email[i]});
+		}catch(err)
+		{
+			res.status(500).json({"ChangePrice ChefRecipe Error":err});
+			return;
+		}
+		console.log("Chef Recipe ",chefRecipe);
+
+		for(let j = 0; j<chefRecipe.recipe.length; ++j)
+		{
+			const targetObjId = mongoose.Types.ObjectId(req.body.id);
+
+			console.log("PIZZA ID: ",chefRecipe.recipe[j]._id);
+			console.log("Given ID: ",req.body.id);
+			if(chefRecipe.recipe[j]._id.equals(targetObjId))
+			{
+				pos = j;
+				break;
+			}
+		}
+
+		if(pos!=-1)
+		{
+
+			chefRecipe.recipe[pos].price = req.body.new_price;
+			chefRecipe.save()
+			.then((result2)=>
+			{
+				res.status(201).json({
+				message:"Price updated!",
+				});
+			}).catch((err2)=>
+			{
+				console.log("Error while updating Price!")
+				console.log('Saving Price Err\nPromise Error Caught!');
+				res.status(500).json(err2);
+
+
+			});
+		}else
+		{
+			continue;
+		}
+
+
+	}
+		if (pos===-1)
+			res.status(500).json("Object ID Error");
+
+
+
+}
+
+

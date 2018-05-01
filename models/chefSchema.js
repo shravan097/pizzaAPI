@@ -20,7 +20,7 @@ const chefSchema = mongoose.Schema({
 	name:{type:String,required:true},
 	recipe:[Recipe],
 	store_affiliated_with:{type:String, required:true},
-	salary:{type:Number,required:false,default:0}
+	salaryPaid:{type:Number,required:false,default:0}
 
 	}
 );
