@@ -238,10 +238,12 @@ exports.add_order = (req,res,next) =>
 
 exports.sign_up = (req,res,next) =>
 {
-	storeSchema['store'].findOne(req.params.store_name).exec()
+	console.log(req.params.name);
+	storeSchema['store'].findOne({"name":req.params.name}).exec()
 	.then(async(result)=>
 	{
-		console.log(req.userData);
+
+		// console.log("Request of User: ",req.userData);
 		if(result.length<1){
 			return res.status(409).json({
 					message:"No Store Registered by Manager Yet!"
@@ -249,8 +251,7 @@ exports.sign_up = (req,res,next) =>
 		}else
 		{
 
-			let x = await storeSchema['store'].findOne(req.params.store_name).exec();
-			console.log(x);
+			let x = result;
 
 			for(let i = 0 ; i< x.pending_customers.email.length;++i)
 				if(x.pending_customers.email[i] === req.userData.email)

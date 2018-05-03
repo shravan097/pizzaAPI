@@ -6,7 +6,7 @@ exports.checkCustomer = (req,res,next)=>{
      try {
         const token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token, key.env.JWT_KEY);
-        req.userData = decoded;j
+        req.userData = decoded;
         if(decoded['typeOfUser']!="Customer") throw "User Logged in is not a Customer!";
         next();
     } catch (error) {
