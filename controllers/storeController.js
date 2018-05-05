@@ -159,7 +159,8 @@ exports.getAllMenu = (req,res,next)=>
 					"name":"Pineapple Pizza",
 					"quantity": 20
 				}
-			]
+			],
+			"destination":"160 Convent Ave NY NY"
 
 
 		}
@@ -188,7 +189,8 @@ exports.add_order = (req,res,next) =>
 			const order = new storeSchema['order']({
 				_id: mongoose.Types.ObjectId(),
 				items: req.body.items,
-				confirmation:confirmed
+				confirmation:confirmed,
+				destination:req.body.destination
 			});
 			result.current_orders.push(order);
 			result.save()
