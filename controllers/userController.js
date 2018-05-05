@@ -88,6 +88,7 @@ exports.sign_up = async (req,res,next)=>
 							_id: new mongoose.Types.ObjectId(),
 							name: req.body.store_affiliated_with,
 							manager_email:req.body.email,
+							location: req.body.location
 						});
 
 						Promise.all([
