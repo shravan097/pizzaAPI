@@ -255,7 +255,7 @@ exports.sign_up = (req,res,next) =>
 
 			for(let i = 0 ; i< x.pending_customers.email.length;++i)
 				if(x.pending_customers.email[i] === req.userData.email)
-					res.status(409).json({message:"User Already on Pending List"});
+					return res.status(409).json({message:"User Already on Pending List"});
 
 
 			result.pending_customers.email.push(req.userData.email);
