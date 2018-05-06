@@ -5,6 +5,7 @@ const key = require("../env");
 const chefSchema = require('../models/chefSchema');
 const storeSchema = require("../models/storeSchema");
 const managerSchema = require("../models/managerSchema");
+const deliverySchema = require("../models/deliverySchema");
 
 
 // Get all the Registered/Pending Customers
@@ -273,6 +274,60 @@ exports.changePrice = async (req,res,next)=>
 
 
 
+}
+
+
+
+
+exports.makeDelivery = async (req,res,next)=>
+{
+	let selected_manager = null;
+	try{
+		selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
+	}catch(err)
+	{
+		return res.status(500).json({"Manager makeDelivery Error":err});
+	}
+
+	storeSchema['store'].findOne({"name":selected_manager.store_affiliated_with}).exec()
+	.then(async (result)=>
+	{
+
+		let deliveryPerson = null;
+		try{
+			deliveryPerson = await deliverySchema.findOne({"email":req.params.deliveryPersonEmail}).exec(); 
+		}catch(err)
+		{
+			return res.status(500).json("Manager Make Delivery. Finding Delivery Error Caught! ", err);
+		}
+
+		if(result.current_orders.length!=0)
+		{
+			deliveryPerson.current_orders.push(result.current_orders[0]);
+			result.current_orders.splice(0,1);
+
+			Promise.all([result.save(),deliveryPerson.save()]).
+			then(result=>
+			{
+				return res.status(200).json({"message":"Order has been sent to the delivery Person!"});
+			})
+			.catch(err=>{
+				return res.status(500).json("Manager Make Delivery. Order Sending Promise Error Caught!\n", err);
+			})
+		}
+		else{
+			return res.status(500).json({"message":"This store has no current ordrers yet!"});
+		}
+
+		
+		
+	}).catch((err)=>
+	{
+		return res.status(500).json({
+			message:"Manager Make Delivery Getting Store Database Error",
+			error: err
+		})
+	});
 }
 
 

@@ -8,6 +8,8 @@ const deliveryController = require("../controllers/deliveryController");
 
 
 router.get('/getAll',deliveryController.getAll);
+router.get('/myOrders',checkAuth.checkDelivery, deliveryController.getMyOrders);
+router.get('/completeOrder/:id',checkAuth.checkDelivery,deliveryController.completeOrder);
 
 
 module.exports = router;
