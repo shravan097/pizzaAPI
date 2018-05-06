@@ -66,7 +66,6 @@ app.use('/customer',customer);
 app.use('/manager',manager);
 app.use('/delivery',delivery);
 
-app.use('/', express.static('public'));
 
 app.post('/sendsms', bodyParser.json(), (req, res) => {
   var client = require('twilio')('ACc688dea366759db0a4508fdb961cd7ad', '374464ffcd050e7fad0991f055481327');
@@ -75,8 +74,11 @@ app.post('/sendsms', bodyParser.json(), (req, res) => {
     from: '8459996707',
     body: 'word to your mother.'
   }, function (err, responseData) {
+      console.log('this works!');
     if (!err) {
-      res.json({"From": responseData.from, "Body": responseData.body});
+      return res.status(200).json({"From": responseData.from, "Body": responseData.body});
+    }else{
+      return res.status(500).json({"Error":err});
     }
   })
 })
