@@ -6,7 +6,7 @@ const Chef = require("../models/chefSchema");
 const Customer = require("../models/customerSchema");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
-
+const Delivery = require("../models/deliverySchema");
 const stores = require('../stores_list');
 const storeSchema = require("../models/storeSchema.js")
 
@@ -88,6 +88,7 @@ exports.sign_up = async (req,res,next)=>
 							_id: new mongoose.Types.ObjectId(),
 							name: req.body.store_affiliated_with,
 							manager_email:req.body.email,
+							location: req.body.location
 						});
 
 						Promise.all([
@@ -252,45 +253,51 @@ exports.sign_up = async (req,res,next)=>
 
 
 
-	// if(typeOfUser==="Delivery")
-	// {
-	// 	User.find({email: req.body.email})
-	// 	.exec()
-	// 	.then(user =>{
-	// 		if(user.length >= 1){
-	// 			return res.status(409).json({
-	// 				message:"User Exist!"
-	// 			});
-	// 		}else{
-	// 			bcrypt.hash(req.body.password,10,(err,hash)=>
-	// 			{
-	// 				if(err){
-	// 					return res.status(500).json({
-	// 						error: err
-	// 					});
-	// 				}else{
-	// 					const user = new User({
-	// 						_id: new mongoose.Types.ObjectId(),
-	// 						email: req.body.email,
-	// 						password: hash,
-	// 						typeOfUser: req.body.typeOfUser
-	// 					});
-	// 					user.save()
-	// 					.then(result=>{
-	// 						console.log(result);
-	// 						res.status(201).json({
-	// 							message:"User Created!"});
-	// 					})
-	// 					.catch(err=>
-	// 					{
-	// 						console.log(err);
-	// 						res.status(500).json({error:err});
-	// 					});
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	// }
+	if(typeOfUser==="Delivery")
+	{
+		User.find({email: req.body.email})
+		.exec()
+		.then(user =>{
+			if(user.length >= 1){
+				return res.status(409).json({
+					message:"User Exist!"
+				});
+			}else{
+				bcrypt.hash(req.body.password,10,(err,hash)=>
+				{
+					if(err){
+						return res.status(500).json({
+							error: err
+						});
+					}else{
+						const user = new User({
+							_id: new mongoose.Types.ObjectId(),
+							email: req.body.email,
+							password: hash,
+							typeOfUser: req.body.typeOfUser
+						});
+						const delivery = new Delivery(
+						{
+							_id: new mongoose.Types.ObjectId(),
+							name:req.body.name,
+							email:req.body.email
+						});
+						Promise.all([user.save(),delivery.save()])
+						.then(result=>{
+							console.log(result);
+							res.status(201).json({
+								message:"Delivery User Created!"});
+						})
+						.catch(err=>
+						{
+							console.log("Delivery Signup Error: ",err);
+							res.status(500).json({error:err});
+						});
+					}
+				});
+			}
+		});
+	}
 
 
 };

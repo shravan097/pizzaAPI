@@ -34,6 +34,9 @@ const customer = require('./routes/customerRoutes');
 //Manager Routes
 const manager = require('./routes/managerRoutes');
 
+//Delivery Routes
+const delivery = require('./routes/deliveryRoutes');
+
 
 var app = express();
 
@@ -61,6 +64,7 @@ app.use('/', users);
 app.use('/chef',chef);
 app.use('/customer',customer);
 app.use('/manager',manager);
+app.use('/delivery',delivery);
 
 app.use('/', express.static('public'));
 

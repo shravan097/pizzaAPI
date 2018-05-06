@@ -88,3 +88,56 @@ exports.make_order = async (req,res,next)=>
 		})
 	});
 }
+/*
+
+	storeSchema['store'].findOneAndUpdate({"name":req.params.name},{"rating":req.params.rating},{"new":true})
+	.then((result)=>
+	{
+		if(result.length<1){
+			return res.status(409).json({
+					message:"No Store Registered by Manager Yet!"
+				});
+		}else
+		{
+			return res.status(202).json(result);
+		}
+	}).catch((err)=>
+	{
+		return res.status(500).json({
+			message:"Change Rating; Database Error ",
+			error: err
+		})
+	});
+
+*/
+
+
+/*
+
+	Sample Input: http://localhost:3001/customer/changeRating/robinCustomer@test.com/5
+	Output: Updated Document
+
+*/
+exports.rateCustomer= (req,res,next)=>
+
+{
+	customerSchema.findOneAndUpdate({"email":req.params.name},{"rating":req.params.rating},{"new":true})
+	.then(result=>
+	{		
+		if(result.length<1){
+			return res.status(409).json({
+					message:"No Customer Found By that email!"
+				});
+		}else
+		{
+			return res.status(202).json(result);
+		}
+	}).catch((err)=>
+	{
+		return res.status(500).json({
+			message:"Change Rating Customer; Database Error ",
+			error: err
+		})
+	});
+
+}

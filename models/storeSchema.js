@@ -11,9 +11,9 @@ const order = mongoose.Schema(
 			name:{type:String,required:true},
 			quantity:{type:Number,required:true}
 		}],
-		confirmation:{type:Number,required:false}
-		//total cost
-		//address
+		confirmation:{type:Number,required:false},
+		destination: {type:String, required:true},
+		customer_email:{type:String,required:false}
 		//method of payment
 	});
 
@@ -23,7 +23,7 @@ const storeSchema = mongoose.Schema(
 		name:{ type:String,required: true,unique:true},
 		manager_email:{type:String,required:false,unique:true},
 		//Location Set to False for initial testing
-		location:{type:String,required:false},
+		location:{type:String,required:true},
 		rating: {type:Number,required:false,default:0},
 		//Will provide checks on controller so chefs and customers are never duplicated.
 		chefs: {email:{type:Array,required:false}},
