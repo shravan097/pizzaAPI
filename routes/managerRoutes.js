@@ -24,5 +24,7 @@ router.get("/getStoreName",checkAuth.checkManager,managerController.getStoreName
 
 router.post('/changePrice',checkAuth.checkManager,managerController.changePrice);
 
+router.get('/makeDelivery/:deliveryPersonEmail',checkAuth.checkManager, managerController.makeDelivery)
+
 
 module.exports = router;
