@@ -3,7 +3,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var bodyParser = require('body-parser');
+
 
 
 //MY STUFF
@@ -67,23 +67,7 @@ app.use('/manager',manager);
 app.use('/delivery',delivery);
 
 
-app.post('/sendsms', bodyParser.json(), (req, res) => {
-  var client = require('twilio')('ACc5ebecba6cdf5c144abd8b3b505430a1', '9d48c981307c285ade32471db5883896');
-  client.sendMessage({
-    from: '18459996707',
-    to: '19144716528',
-    body: 'word to your mother.'
-  }, function (err, responseData) {
-      console.log('this works!');
-    if (!err) {
-      return res.status(200).json({"From": responseData.from, "Body": responseData.body});
-    }else{
-      return res.status(500).json({"Error":err});
-    }
-  })
-})
 
-//app.listen(process.env.PORT || 3000);
 
 
 // catch 404 and forward to error handler

@@ -281,6 +281,7 @@ exports.changePrice = async (req,res,next)=>
 
 exports.makeDelivery = async (req,res,next)=>
 {
+	console.log(req.params);
 	let selected_manager = null;
 	try{
 		selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();

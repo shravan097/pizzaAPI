@@ -53,7 +53,8 @@ exports.make_order = async (req,res,next)=>
 			const order = new storeSchema['order']({
 				_id: mongoose.Types.ObjectId(),
 				items: req.body.items,
-				confirmation:confirmed
+				confirmation:confirmed,
+				customer_email:req.userData.email
 
 			});
 			console.log(findCustomer);
