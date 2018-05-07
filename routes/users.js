@@ -21,13 +21,13 @@ router.post("/login",userController.login);
 
 
 //Twilo stuff
-router.post('/sendsms', bodyParser.json(), (req, res,next) => {
+router.post('/sendsms/:num', bodyParser.json(), (req, res,next) => {
   var client = require('twilio')('ACc688dea366759db0a4508fdb961cd7ad', '374464ffcd050e7fad0991f055481327');
   client.messages
   .create({
-     body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-     from: '9144716528',
-     to: '8459996707'
+     body: 'Your order is on the way',
+     from: '+18459996707',
+     to: req.params.num
    })
   .then(message => console.log(message.sid))
   .done();
