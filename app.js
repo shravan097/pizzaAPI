@@ -68,10 +68,10 @@ app.use('/delivery',delivery);
 
 
 app.post('/sendsms', bodyParser.json(), (req, res) => {
-  var client = require('twilio')('ACc688dea366759db0a4508fdb961cd7ad', '374464ffcd050e7fad0991f055481327');
+  var client = require('twilio')('ACc5ebecba6cdf5c144abd8b3b505430a1', '9d48c981307c285ade32471db5883896');
   client.sendMessage({
-    to: '+9144716528',
-    from: '+8459996707',
+    from: '18459996707',
+    to: '19144716528',
     body: 'word to your mother.'
   }, function (err, responseData) {
       console.log('this works!');
