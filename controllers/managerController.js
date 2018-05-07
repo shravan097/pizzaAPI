@@ -331,4 +331,77 @@ exports.makeDelivery = async (req,res,next)=>
 	});
 }
 
+/*
+	Requires id of the complaint
+
+
+	Sample Input:
+		{
+		"id":"5af0be6a7030fd10a44fa352"
+		}
+*/
+
+exports.handleComplaint = (req,res,next)=>
+{
+	managerSchema.findOne({"email":req.userData.email})
+	.then(result=>
+	{
+		let pos = -1;
+		for(let i =0; i<result.customer_complaints.length; ++i)
+		{	
+				console.log(result.customer_complaints[i].id)
+			if(result.customer_complaints[i].id.equals(req.body.id))
+			{	pos = i; break;}
+		}
+
+		if(pos!=-1)
+		{
+			result.customer_complaints.splice(pos,1);
+	
+			result.save()
+			.then(result=>
+			{
+				return res.status(200).json({"message":"Complaint Handled succesfully!"});
+			}).catch(err=>
+			{
+				return res.status(400).json({
+					error:"Manager handleComplaint saving failiure"
+				})
+			});
+			
+		}
+		else
+		{
+			return res.status(400).json({
+			message:"Manager handleComplaint Failiure"
+			})
+		}
+
+	})
+	.catch(err=>
+	{
+		return res.status(500).json({
+			message:"Manager handle Complaint getting manager Database Error",
+			error: err
+		})
+
+
+	});
+}
+
+exports.getMyInfo = (req,res,next)=>
+{
+	managerSchema.findOne({"email":req.userData.email})
+	.then(result=>
+	{
+		return res.status(200).json(result);
+	})
+	.catch(err=>
+	{
+		return res.status(500).json({
+			message:"Manager getInfo Database Error",
+			error: err
+		})
+	});
+}
 
