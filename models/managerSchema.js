@@ -13,7 +13,8 @@ const managerSchema = mongoose.Schema({
 		match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 	},
 	name: {type:String,required:true},
-	store_affiliated_with: {type:String, required:true}
+	store_affiliated_with: {type:String, required:true},
+	customer_complaints:[]
 
 
 });

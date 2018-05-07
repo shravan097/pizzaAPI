@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = require("../env");
 const customerSchema = require("../models/customerSchema");
+const managerSchema = require("../models/managerSchema");
 const storeSchema = require("../models/storeSchema");
 
 
@@ -142,3 +143,68 @@ exports.rateCustomer= (req,res,next)=>
 	});
 
 }
+
+
+/* Requres: name of store, complaint message
+	
+Sample:	{
+			"name":"CCNY",
+			"complaint":"I had hair on my pizza!!!"
+
+		}
+
+*/
+
+
+exports.sendComplaint = async (req,res,next)=>
+{
+	let manager_email = null;
+	try{
+		manager_email = await storeSchema["store"].findOne({"name":req.body.name});
+		manager_email = manager_email.manager_email
+	}catch(err)
+	{
+		console.log(err);
+		return res.status(400).json({
+			message:"Error when finding email for sendComplaint!",
+			error:err
+		})
+	}
+
+	managerSchema.findOne({"email":manager_email})
+	.then(result=>
+	{
+		const complaint = 
+		{
+			"id": mongoose.Types.ObjectId(),
+			"complaint":req.body.complaint
+		}
+		result.customer_complaints.push(complaint);
+		result.save()
+		.then(result=>
+		{
+			return res.status(200).json({
+				message:"Complaint was sent to the Manager!"
+			})
+		})
+		.catch(err=>
+		{
+			return res.status(400).json({
+			message:"Error when saving complaint for sendComplaint!",
+			error:err
+		})
+		})
+	}).catch(err=>
+	{
+		console.log("Send Complaint Error! ",err);
+		return res.status(400).json({
+			message:"Error when updating complaint for sendComplaint!",
+			error:err
+		})
+	})
+
+	
+}
+
+
+

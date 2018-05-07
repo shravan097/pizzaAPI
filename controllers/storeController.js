@@ -191,7 +191,8 @@ exports.add_order = (req,res,next) =>
 				_id: mongoose.Types.ObjectId(),
 				items: req.body.items,
 				confirmation:confirmed,
-				destination:req.body.destination
+				destination:req.body.destination,
+				
 			});
 			result.current_orders.push(order);
 			result.save()

@@ -24,7 +24,11 @@ router.get("/getStoreName",checkAuth.checkManager,managerController.getStoreName
 
 router.post('/changePrice',checkAuth.checkManager,managerController.changePrice);
 
-router.get('/makeDelivery/:deliveryPersonEmail',checkAuth.checkManager, managerController.makeDelivery)
+router.get('/makeDelivery/:deliveryPersonEmail',checkAuth.checkManager, managerController.makeDelivery);
+
+router.post("/handleComplaint",checkAuth.checkManager,managerController.handleComplaint);
+
+router.get("/getMyInfo",checkAuth.checkManager,managerController.getMyInfo);
 
 
 module.exports = router;
