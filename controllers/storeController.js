@@ -7,6 +7,7 @@ const stores = require('../stores_list');
 const storeSchema = require("../models/storeSchema");
 
 
+
 exports.get_all_unregistered = (req,res,next)=>
 {
 	return res.send(stores);
@@ -302,6 +303,7 @@ exports.getTopThree =  (req,res,next)=>{
 				});
 		}else
 		{
+			var distance = require('google-distance');
 			return res.status(202).json(result);
 		}
 	}).catch((err)=>

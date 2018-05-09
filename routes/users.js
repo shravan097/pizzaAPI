@@ -21,11 +21,12 @@ router.post("/login",userController.login);
 
 
 //Twilo stuff
-router.post('/sendsms/:num', bodyParser.json(), (req, res,next) => {
+router.post('/sendsms/:num/:time', bodyParser.json(), (req, res,next) => {
   var client = require('twilio')('ACc688dea366759db0a4508fdb961cd7ad', '374464ffcd050e7fad0991f055481327');
+  //var bod = 'Your order is ' + time + ' minutes away';
   client.messages
   .create({
-     body: 'Your order is on the way',
+     body: 'Your order is ' + req.params.time + ' minutes away',
      from: '+18459996707',
      to: req.params.num
    })
