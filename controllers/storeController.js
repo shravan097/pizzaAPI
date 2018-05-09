@@ -304,7 +304,7 @@ exports.getTopThree =  (req,res,next)=>{
 				});
 		}else
 		{
-			var distance = require('google-distance');
+			// var distance = require('google-distance');
 			return res.status(202).json(result);
 		}
 	}).catch((err)=>
@@ -343,6 +343,8 @@ exports.changeRating = async (req,res,next)=>{
 	// 		error: err
 	// 	})
 	// });
+
+	console.log(req.params);
 	let storeObj = null;
 	try{
 
@@ -357,7 +359,6 @@ exports.changeRating = async (req,res,next)=>{
 		})
 	}
 
-
 	if(storeObj.length<1)
 	{
 			return res.status(409).json({
@@ -365,9 +366,10 @@ exports.changeRating = async (req,res,next)=>{
 				});
 	}else
 	{
-		const totalRating = parseInt(storeObj.totalRating);
-		storeObj.rating = (parseInt(storeObj.rating) + parseInt(req.params.rating))/totalRating;
-		storeObj.totalRating++;
+		console.log(storeObj.rating, " ", storeObj.totalRated);
+		const totalRated = parseInt(storeObj.totalRated);
+		storeObj.rating = (parseInt(storeObj.rating) + parseInt(req.params.rating))/totalRated;
+		storeObj.totalRated++;
 	}
 	
 

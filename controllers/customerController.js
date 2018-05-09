@@ -148,9 +148,9 @@ exports.rateCustomer= async (req,res,next)=>
 				});
 	}else
 	{
-		const totalRating = parseInt(customerObj.totalRating);
-		customerObj.rating = (parseInt(customerObj.rating) + parseInt(req.params.rating))/totalRating;
-		customerObj.totalRating++;
+		const totalRated = parseInt(customerObj.totalRated);
+		customerObj.rating = (parseInt(customerObj.rating) + parseInt(req.params.rating))/totalRated;
+		customerObj.totalRated++;
 	}
 	
 
