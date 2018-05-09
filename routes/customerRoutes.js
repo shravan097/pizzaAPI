@@ -8,4 +8,5 @@ const customerController = require("../controllers/customerController");
 router.post('/makeOrder',checkAuth.checkCustomer,customerController.make_order);
 router.post('/changeRating/:name/:rating',customerController.rateCustomer);
 router.post('/sendComplaint',customerController.sendComplaint);
+router.post('/rateDelivery/:email/:rating',customerController.rateDelivery);
 module.exports = router;

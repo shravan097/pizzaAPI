@@ -5,6 +5,7 @@ const key = require("../env");
 const customerSchema = require("../models/customerSchema");
 const managerSchema = require("../models/managerSchema");
 const storeSchema = require("../models/storeSchema");
+const deliverySchema = require("../models/deliverySchema");
 
 
 // Make order for visitor.  It will just store an order on Store and Manager will see it.
@@ -55,8 +56,9 @@ exports.make_order = async (req,res,next)=>
 				_id: mongoose.Types.ObjectId(),
 				items: req.body.items,
 				confirmation:confirmed,
-				customer_email:req.userData.email
-
+				customer_email:req.userData.email,
+				destination:req.body.destination,
+				phone_number:req.body.phone_number
 			});
 			console.log(findCustomer);
 			result.current_orders.push(order);
@@ -120,25 +122,49 @@ exports.make_order = async (req,res,next)=>
 	Output: Updated Document
 
 */
-exports.rateCustomer= (req,res,next)=>
+exports.rateCustomer= async (req,res,next)=>
 
 {
-	customerSchema.findOneAndUpdate({"email":req.params.name},{"rating":req.params.rating},{"new":true})
-	.then(result=>
-	{		
-		if(result.length<1){
+	
+	let customerObj = null;
+	try{
+
+		customerObj = await customerSchema.findOne({"email":req.params.name})
+
+	}catch(err)
+	{
+		console.log("Customer rate delivery Error: ",err);
+		return res.status(500).json({
+			message:"Error DB Customer Rate Delivery!",
+			error:err
+		})
+	}
+
+
+	if(customerObj.length<1)
+	{
 			return res.status(409).json({
 					message:"No Customer Found By that email!"
 				});
-		}else
-		{
-			return res.status(202).json(result);
-		}
-	}).catch((err)=>
+	}else
 	{
+		const totalRating = parseInt(customerObj.totalRating);
+		customerObj.rating = (parseInt(customerObj.rating) + parseInt(req.params.rating))/totalRating;
+		customerObj.totalRating++;
+	}
+	
+
+	customerObj.save()
+	.then(result=>
+	{
+		return res.status(202).json({message:"Update Successful!"});
+
+	})
+	.catch(err=>{
+		console.log("Customer Rate Update Error: ",err);
 		return res.status(500).json({
-			message:"Change Rating Customer; Database Error ",
-			error: err
+			message:"Error DB Customer Rate Delivery!",
+			error:err
 		})
 	});
 
@@ -206,5 +232,58 @@ exports.sendComplaint = async (req,res,next)=>
 	
 }
 
+/*
+Type of Request: POST
+Example: 
+Input: http://localhost:3001/customer/rateDelivery/d@test.com/1
 
+*/
+
+exports.rateDelivery = async (req,res,next)=>
+{
+	let deliveryObj = null;
+	try{
+
+		deliveryObj = await deliverySchema.findOne({"email":req.params.email})
+
+	}catch(err)
+	{
+		console.log("Customer rate delivery Error: ",err);
+		return res.status(500).json({
+			message:"Error DB Customer Rate Delivery!",
+			error:err
+		})
+	}
+
+
+	if(deliveryObj.length<1)
+	{
+			return res.status(409).json({
+					message:"No Delivery Person Found By that email!"
+				});
+	}else
+	{
+		const totalRating = parseInt(deliveryObj.totalRating);
+		deliveryObj.rating = (parseInt(deliveryObj.rating) + parseInt(req.params.rating))/totalRating;
+		deliveryObj.totalRating++;
+	}
+	
+
+	deliveryObj.save()
+	.then(result=>
+	{
+		return res.status(202).json({message:"Update Successful!"});
+
+	})
+	.catch(err=>{
+		console.log("Customer Rate Update Delivery Error: ",err);
+		return res.status(500).json({
+			message:"Error DB Customer Rate Update Delivery!",
+			error:err
+		})
+	});
+
+
+	
+}
 

@@ -193,6 +193,7 @@ exports.add_order = (req,res,next) =>
 				items: req.body.items,
 				confirmation:confirmed,
 				destination:req.body.destination,
+				phone_number:req.body.phone_number
 				
 			});
 			result.current_orders.push(order);
@@ -323,25 +324,68 @@ exports.getTopThree =  (req,res,next)=>{
 	Only provide rate change method for those customers on pending
 */
 
-exports.changeRating = (req,res,next)=>{
-	storeSchema['store'].findOneAndUpdate({"name":req.params.name},{"rating":req.params.rating},{"new":true})
-	.then((result)=>
+exports.changeRating = async (req,res,next)=>{
+	// storeSchema['store'].findOneAndUpdate({"name":req.params.name},{"rating":req.params.rating},{"new":true})
+	// .then((result)=>
+	// {
+	// 	if(result.length<1){
+	// 		return res.status(409).json({
+	// 				message:"No Store Registered by Manager Yet!"
+	// 			});
+	// 	}else
+	// 	{
+	// 		return res.status(202).json(result);
+	// 	}
+	// }).catch((err)=>
+	// {
+	// 	return res.status(500).json({
+	// 		message:"Change Rating; Database Error ",
+	// 		error: err
+	// 	})
+	// });
+	let storeObj = null;
+	try{
+
+		storeObj = await storeSchema['store'].findOne({"name":req.params.name})
+
+	}catch(err)
 	{
-		if(result.length<1){
-			return res.status(409).json({
-					message:"No Store Registered by Manager Yet!"
-				});
-		}else
-		{
-			return res.status(202).json(result);
-		}
-	}).catch((err)=>
-	{
+		console.log("Customer rate delivery Error: ",err);
 		return res.status(500).json({
-			message:"Change Rating; Database Error ",
-			error: err
+			message:"Error DB Store Rate Delivery!",
+			error:err
+		})
+	}
+
+
+	if(storeObj.length<1)
+	{
+			return res.status(409).json({
+					message:"No Store Found By that email!"
+				});
+	}else
+	{
+		const totalRating = parseInt(storeObj.totalRating);
+		storeObj.rating = (parseInt(storeObj.rating) + parseInt(req.params.rating))/totalRating;
+		storeObj.totalRating++;
+	}
+	
+
+	storeObj.save()
+	.then(result=>
+	{
+		return res.status(202).json({message:"Update Successful!"});
+
+	})
+	.catch(err=>{
+		console.log("Store Rate Update Error: ",err);
+		return res.status(500).json({
+			message:"Error DB Store Rate Delivery!",
+			error:err
 		})
 	});
+
+
 }
 
 

@@ -21,7 +21,7 @@ router.post("/signup/:name",checkAuth.checkCustomer,storeController.sign_up);
 router.get("/getTop",storeController.getTopThree);
 
 //I will change this to priviledge function later
-router.get("/changeRating/:name/:rating",storeController.changeRating);
+router.post("/changeRating/:name/:rating",storeController.changeRating);
 
 
 module.exports = router;

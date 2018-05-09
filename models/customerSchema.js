@@ -15,6 +15,7 @@ const customerSchema = mongoose.Schema({
 	// location:{type:String,required: true},
 	store_affiliated_with:{name:{type:Array, required:false,index:false,sparse:true}},
 	rating: {type:Number,required:false,default:0},
+	totalRated:{type:Number,required:false,default:1},
 	orders: {type:Array,required:false,index:false,sparse:false} 
 	}
 );
