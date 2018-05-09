@@ -405,3 +405,20 @@ exports.getMyInfo = (req,res,next)=>
 	});
 }
 
+
+exports.getMyStoreInfo = (req,res,next)=>
+{
+	storeSchema["store"].findOne({"manager_email":req.userData.email})
+	.then(result=>
+	{
+		return res.status(200).json(result);
+	})
+	.catch(err=>
+	{
+		console.log("GetMyStoreInfo Error: ",err);
+		return res.status(500).json({
+			message:"Manager getMyStoreInfo Database Error",
+			error: err
+		})
+	});
+}

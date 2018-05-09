@@ -205,7 +205,7 @@ exports.add_order = (req,res,next) =>
 			});
 			}).catch((err)=>
 			{
-				console.log("Error!")
+				console.log("Error!\n",err)
 				res.status(500).json(err);
 				console.log('Promise Error Caught!');
 
