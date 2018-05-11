@@ -31,5 +31,10 @@ router.post("/handleComplaint",checkAuth.checkManager,managerController.handleCo
 router.get("/getMyInfo",checkAuth.checkManager,managerController.getMyInfo);
 router.get("/getMyStoreInfo",checkAuth.checkManager,managerController.getMyStoreInfo);
 
+router.post('/payDelivery',checkAuth.checkManager, managerController.payDelivery);
+
+router.get('/getMyChefs',checkAuth.checkManager,managerController.getMyChefs);
+
+router.post('/payChef',checkAuth.checkManager, managerController.payChef);
 
 module.exports = router;

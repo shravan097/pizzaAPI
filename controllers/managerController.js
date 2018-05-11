@@ -422,3 +422,90 @@ exports.getMyStoreInfo = (req,res,next)=>
 		})
 	});
 }
+
+
+exports.payDelivery = (req,res,next)=>
+{
+	deliverySchema.findOne({"email":req.body.email})
+	.then(result=>
+	{
+		result.salaryPaid += parseInt(req.body.amount)
+
+		result.save()
+		.then(result=>
+		{
+			return res.status(200).json({"message":"payDelivery success"});
+		})
+		.catch(err=>
+		{
+			console.log("Manager payDelivery saving Error: ",err);
+			return res.status(500).json({
+				message:"Manager payDelivery saving Error",
+				error: err
+			})
+		})
+	}).catch(err=>
+	{
+		console.log("Manager DB payDelivery Error: ",err);
+		return res.status(500).json({
+			message:"Manager payDelivery Database Error",
+			error: err
+		})
+	})
+}
+
+
+
+
+exports.getMyChefs = async (req,res,next)=>
+{
+	const selected_manager = await managerSchema.findOne({"email":req.userData.email},"store_affiliated_with").exec();
+
+
+	storeSchema["store"].findOne({"name":selected_manager.store_affiliated_with})
+	.then(result=>
+	{
+		return res.status(200).json(result.chefs.email)
+	}).catch(err=>
+	{
+		console.log("Manager Store Retrieval DB getMyChefs Error: ",err);
+		return res.status(500).json({
+			message:"Manager payDelivery Database Error",
+			error: err	
+		})
+
+	});
+}
+
+
+exports.payChef = (req,res,next)=>
+{
+	chefSchema["chef"].findOne({"email":req.body.email})
+	.then(result=>
+	{
+
+		result.salaryPaid += parseInt(req.body.amount)
+
+		result.save()
+		.then(result=>
+		{
+			return res.status(200).json({"message":"payChef success"});
+		})
+		.catch(err=>
+		{
+			console.log("Manager payChef saving Error: ",err);
+			return res.status(500).json({
+				message:"Manager payChef saving Error",
+				error: err
+			})
+		})
+	}).catch(err=>
+	{
+		console.log("Manager DB payChef Error: ",err);
+		return res.status(500).json({
+			message:"Manager payChef Database Error",
+			error: err
+		})
+	})
+}
+
