@@ -5,7 +5,7 @@ const key = require("../env");
 const chefSchema = require('../models/chefSchema');
 const stores = require('../stores_list');
 const storeSchema = require("../models/storeSchema");
-
+const MIN_NUM_OF_CHEF=2
 
 
 exports.get_all_unregistered = (req,res,next)=>
@@ -15,7 +15,9 @@ exports.get_all_unregistered = (req,res,next)=>
 
 exports.get_all = (req,res,next)=>
 {
-	storeSchema['store'].find().exec()
+
+
+	storeSchema['store'].find({"$where":'this.chefs.email.length>='+MIN_NUM_OF_CHEF})
 	.then((result)=>
 	{
 		if(result.length<1){
@@ -294,7 +296,8 @@ exports.sign_up = (req,res,next) =>
 // Get Top 3 Stores
 exports.getTopThree =  (req,res,next)=>{
 
-	storeSchema['store'].find().sort({"rating":-1}).limit(3).exec()
+	storeSchema['store'].find({"$where":'this.chefs.email.length>='+MIN_NUM_OF_CHEF})
+	.sort({"rating":-1}).limit(3).exec()
 	.then((result)=>
 	{
 		if(result.length<1){
