@@ -200,7 +200,6 @@ exports.add_order = (req,res,next) =>
 			result.save()
 			.then((result2)=>
 			{
-				console.log(result2);
 				res.status(201).json({
 				message:"Created Order!",
 				unique_conifmration: confirmed

@@ -39,8 +39,9 @@ const deliverySchema = require("../models/deliverySchema");
 */
 exports.make_order = async (req,res,next)=>
 {
+	console.log("THIS WORKS!!!!!")
+	console.log("Rquest Body: ",req.body);
 	const confirmed= Date.now();
-
 	let findCustomer = await customerSchema.findOne({"email":req.userData.email}).exec();
 
 	storeSchema['store'].findOne({"name":req.body.store_name}).exec()
@@ -60,9 +61,7 @@ exports.make_order = async (req,res,next)=>
 				destination:req.body.destination,
 				phone_number:req.body.phone_number
 			});
-			console.log(findCustomer);
 			result.current_orders.push(order);
-			console.log(req.userData)
 			if(findCustomer===null)
 				throw " Finding Customer Error. Make sure all the information are inputted properly!"
 			findCustomer.orders.push(order);
@@ -283,7 +282,24 @@ exports.rateDelivery = async (req,res,next)=>
 		})
 	});
 
-
-	
 }
+
+exports.getOrder = (req,res,next)=>
+{
+	customerSchema.findOne({"email":req.params.email})
+	.then(result=>
+	{
+			return res.status(200).json(result.orders)
+	}).catch(err=>
+	{
+		console.log("Customer getOrder Error: ",err);
+		return res.status(500).json({
+			message:"Error DB Customer getOrder! Possibly no customer found with that email",
+			error:err
+		})	
+	})
+}
+
+
+
 
