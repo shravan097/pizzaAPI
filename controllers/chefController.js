@@ -138,3 +138,64 @@ exports.change_price = async (req,res,next)=>
 
 
 }
+
+
+// Needs _id and new_rating of recipe
+/*
+
+Sample Input: 		{
+			"id":"5af5dbee888779cb673648e0",
+			"new_rating":5
+
+
+		}
+
+*/
+
+
+exports.changeRating = async (req,res,next)=>
+{
+		
+		const targetObjId = mongoose.Types.ObjectId(req.body.id);
+
+		chefSchema['chef'].find()
+		.then(result=>
+		{
+
+			for (let i = 0; i<result.length; ++i)
+			{
+				for(let j = 0; j<result[i].recipe.length; ++j)
+				{
+					console.log(result[i].recipe[j])
+					if(result[i].recipe[j]._id.equals(targetObjId))
+					{
+
+						const totalRated = parseInt(result[i].recipe[j].total_rated);
+						const prev_total = totalRated*parseInt(result[i].recipe[j].rating)
+						result[i].recipe[j].rating = (prev_total+ parseInt(req.body.new_rating))/(totalRated+1);
+						result[i].recipe[j].total_rated++;
+						result[i].save()
+						.then(result=>{
+							return res.status(200).json({
+								"message":"Rating Successfully Changed!"
+							})
+						})
+						.catch(err=>
+						{
+							console.log("Chef Recipe changeRating Saving Error!\n",err);
+							return res.status(400).json({
+								"message":"Chef Recipe changeRating Saving Error!",
+								"error":err
+							})
+						})
+					}
+				}
+			}
+		}).catch(err=>{
+			console.log("Chef Identify error Change Rating!\n",err);
+			return res.status(400).json({"message":"Chef Not identified with the recipe!"});
+		})
+
+
+
+}

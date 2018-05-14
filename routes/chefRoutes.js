@@ -15,4 +15,6 @@ router.post("/getMenu",checkAuth.checkChef,chefController.my_menu);
 
 router.post("/changePrice",chefController.change_price);
 
+router.post("/changeRating",chefController.changeRating);
+
 module.exports = router;

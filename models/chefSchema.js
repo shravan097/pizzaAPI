@@ -6,6 +6,7 @@ const Recipe =  mongoose.Schema(
 	name:{type:String,required:true},
 	price:{type: Number, required:true},
 	rating:{type:Number,required:false, default:0},
+	total_rated:{type:Number,required:false,default:1},
 	description:{type:String,required:true}
 });
 
